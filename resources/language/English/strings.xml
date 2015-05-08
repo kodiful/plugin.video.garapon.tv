@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <!--
+      strings 30000 thru 30999 reserved for plugins and plugin settings
+      strings 31000 thru 31999 reserved for skins
+      strings 32000 thru 32999 reserved for scripts
+      strings 33000 thru 33999 reserved for common strings used in add-ons
+  -->
+  <string id="30000">Smartlist Settings</string>
+  <string id="30001">Channel</string>
+  <string id="30002">Genre</string>
+  <string id="30003">Subgenre</string>
+  <string id="30004">Search</string>
+  <string id="30901">EPG</string>
+  <string id="30902">Caption</string>
+  <string id="30005">Keyword</string>
+  <string id="30006">[COLOR green]Add Smartlist[/COLOR]</string>
+  <string id="30007">[COLOR green]Change Smartlist[/COLOR]</string>
+  <string id="30100">Garapon TV Settings</string>
+  <string id="30101">Garapon ID</string>
+  <string id="30102">Password</string>
+  <string id="30103">Autoconfig IP Address &amp; Ports</string>
+  <string id="30104">IP Address</string>
+  <string id="30105">HTTP Port(default:80)</string>
+  <string id="30106">RTMP Port(default:1935)</string>
+  <string id="30107">[COLOR green]Update Settings[/COLOR]</string>
+  <string id="30108">Session ID</string>
+  <string id="30109">[COLOR green]Update Session ID[/COLOR]</string>
+  <string id="30110">[COLOR green]Update Channel List[/COLOR]</string>
+  <string id="30200">Other Settings</string>
+  <string id="30201">[COLOR green]Clear Thumbnails Cache[/COLOR]</string>
+  <string id="30202">Thumbnails</string>
+  <string id="30203">Streaming</string>
+  <string id="30204">Debug</string>
+  <string id="30300">Private</string>
+  <string id="30301">Downloads</string>
+  <string id="30302">Path to Folder</string>
+  <string id="30303">URL to Folder</string>
+  <string id="30304">Transcoding</string>
+  <string id="30305">[COLOR green]Clear Folder[/COLOR]</string>
+  <string id="30306">Favorites</string>
+  <string id="30307">Session ID Notification</string>
+  <string id="30308">Notification URL</string>
+  <string id="30309">[COLOR green]Update RSS[/COLOR]</string>
+  <string id="30903">Add as smartlist</string>
+  <string id="30904">Edit smartlist</string>
+  <string id="30905">Remove smartlist</string>
+  <string id="30906">Description</string>
+  <string id="30907">Date</string>
+  <string id="30908">Channel</string>
+  <string id="30909">Genre</string>
+  <string id="30910">Subgenre</string>
+  <string id="30911">Search</string>
+  <string id="30912">All</string>
+  <string id="30913">All</string>
+  <string id="30914">All</string>
+  <string id="30915">All</string>
+  <string id="30916">[COLOR green]On Air:TV[/COLOR]</string>
+  <string id="30917">Show TV programs on air</string>
+  <string id="30918">Search programs</string>
+  <string id="30919">%m/%d</string>
+  <string id="30920">Mon,Tue,Wed,Thu,Fri,Sat,Sun</string>
+  <string id="30921">Show page {page} out of {totalpages} pages ({hit}programs)</string>
+  <string id="30922">Next page</string>
+  <string id="30923">[COLOR green]Favorites[/COLOR]</string>
+  <string id="30924">Show favorites</string>
+  <string id="30925">Add to favorites</string>
+  <string id="30926">Remove from favorites</string>
+  <string id="30927">[COLOR green]Downloads[/COLOR]</string>
+  <string id="30928">Show downloads</string>
+  <string id="30929">Add to downloads</string>
+  <string id="30930">Remove from downloads</string>
+  <string id="30931">[COLOR green]On Air:Radio[/COLOR]</string>
+  <string id="30932">Show radio programs on air</string>
+  <string id="30933">[COLOR green]Search:Date[/COLOR]</string>
+  <string id="30934">[COLOR green]Search:Channel[/COLOR]</string>
+  <string id="30935">[COLOR green]Search:Genre[/COLOR]</string>
+  <string id="30936">Return to top</string>
+  <string id="30937">Addon settings</string>
+</strings>

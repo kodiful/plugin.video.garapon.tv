@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <!--
+      strings 30000 thru 30999 reserved for plugins and plugin settings
+      strings 31000 thru 31999 reserved for skins
+      strings 32000 thru 32999 reserved for scripts
+      strings 33000 thru 33999 reserved for common strings used in add-ons
+  -->
+  <string id="30000">スマートリスト</string>
+  <string id="30001">チャンネル</string>
+  <string id="30002">ジャンル</string>
+  <string id="30003">サブジャンル</string>
+  <string id="30004">検索対象</string>
+  <string id="30901">EPG</string>
+  <string id="30902">字幕</string>
+  <string id="30005">キーワード</string>
+  <string id="30006">[COLOR green]スマートリストを追加[/COLOR]</string>
+  <string id="30007">[COLOR green]スマートリストを変更[/COLOR]</string>
+  <string id="30100">ガラポンTV設定</string>
+  <string id="30101">ガラポンID</string>
+  <string id="30102">パスワード</string>
+  <string id="30103">IPアドレス・ポート自動設定</string>
+  <string id="30104">IPアドレス</string>
+  <string id="30105">HTTPポート(デフォルト:80)</string>
+  <string id="30106">RTMPポート(デフォルト:1935)</string>
+  <string id="30107">[COLOR green]設定を更新[/COLOR]</string>
+  <string id="30108">セッションID</string>
+  <string id="30109">[COLOR green]セッションIDを更新[/COLOR]</string>
+  <string id="30110">[COLOR green]チャンネルリストを更新[/COLOR]</string>
+  <string id="30200">その他の設定</string>
+  <string id="30201">[COLOR green]サムネイルキャッシュをクリア[/COLOR]</string>
+  <string id="30202">サムネイル</string>
+  <string id="30203">ストリーミング</string>
+  <string id="30204">デバッグ</string>
+  <string id="30300">プライベート</string>
+  <string id="30301">ダウンロード</string>
+  <string id="30302">フォルダのパス</string>
+  <string id="30303">フォルダのURL</string>
+  <string id="30304">トランスコーディング</string>
+  <string id="30305">[COLOR green]フォルダをクリア[/COLOR]</string>
+  <string id="30306">お気に入り</string>
+  <string id="30307">セッションID変更を通知</string>
+  <string id="30308">通知先のURL</string>
+  <string id="30309">[COLOR green]RSSを更新[/COLOR]</string>
+  <string id="30903">スマートリストに追加</string>
+  <string id="30904">スマートリストを編集</string>
+  <string id="30905">スマートリストを削除</string>
+  <string id="30906">詳細情報</string>
+  <string id="30907">日付</string>
+  <string id="30908">チャンネル</string>
+  <string id="30909">ジャンル</string>
+  <string id="30910">サブジャンル</string>
+  <string id="30911">検索対象</string>
+  <string id="30912">すべての日付</string>
+  <string id="30913">すべてのチャンネル</string>
+  <string id="30914">すべてのジャンル</string>
+  <string id="30915">すべてのサブジャンル</string>
+  <string id="30916">[COLOR orange]放送中:テレビ[/COLOR]</string>
+  <string id="30917">現在テレビで放送中の番組を表示します</string>
+  <string id="30918">番組を検索します</string>
+  <string id="30919">%m月%d日</string>
+  <string id="30920">月,火,水,木,金,土,日</string>
+  <string id="30921">全{totalpages}ページ({hit}番組)のうち{page}ページ目を表示します</string>
+  <string id="30922">次のページへ</string>
+  <string id="30923">[COLOR yellow]お気に入り[/COLOR]</string>
+  <string id="30924">ガラポンTV本体に保存されているお気に入りを表示します</string>
+  <string id="30925">お気に入りに追加</string>
+  <string id="30926">お気に入りから削除</string>
+  <string id="30927">[COLOR yellow]ダウンロード[/COLOR]</string>
+  <string id="30928">ダウンロードを表示します</string>
+  <string id="30929">ダウンロードに追加</string>
+  <string id="30930">ダウンロードから削除</string>
+  <string id="30931">[COLOR orange]放送中:ラジオ[/COLOR]</string>
+  <string id="30932">現在ラジオで放送中の番組を表示します</string>
+  <string id="30933">[COLOR green]検索:日付[/COLOR]</string>
+  <string id="30934">[COLOR green]検索:チャンネル[/COLOR]</string>
+  <string id="30935">[COLOR green]検索:ジャンル[/COLOR]</string>
+  <string id="30936">トップに戻る</string>
+  <string id="30937">アドオン設定</string>
+</strings>
