@@ -1,2 +1,8 @@
-Search & Watch Garapon TV
-Works on Windows & Mac OS X
+ガラポンTVを操作するためのKodiアドオンです。 特にテレビとの連携を意識して開発しました。
+
+・番組情報から簡単な操作で検索ワードを設定し、帯番組などを検索できるスマートリスト
+・テレビリモコンを使って、テレビ画面で検索、再生等の操作が可能（USB-CEC Adapterが必要）
+
+などの機能が利用できます。
+
+Windows、Mac OS Xで動作します。Linuxやその他のOSでの動作は未検証です。
