@@ -11,7 +11,7 @@ import xbmcaddon
 garapon = 'plugin.video.garapon.tv'
 addon = xbmcaddon.Addon(garapon)
 
-radiruko = ''
+radiruko = 'plugin.audio.kodi.ra'
 
 # HTTP接続におけるタイムアウト(秒)
 socket.setdefaulttimeout(60)
