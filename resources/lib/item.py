@@ -32,12 +32,9 @@ class Item:
                 t = datetime.datetime.strptime(self.item['startdate'],'%Y-%m-%d %H:%M:%S')
             except TypeError:
                 t = datetime.datetime.fromtimestamp(time.mktime(time.strptime(self.item['startdate'],'%Y-%m-%d %H:%M:%S')))
-            try:
-                s = datetime.datetime.strptime(self.item['duration'],'%H:%M:%S')
-            except TypeError:
-                s = datetime.datetime.fromtimestamp(time.mktime(time.strptime(self.item['duration'],'%H:%M:%S')))
-            s = t + datetime.timedelta(hours=s.hour, minutes=s.minute, seconds=s.second)
             sdate = t.strftime('%H:%M')
+            s = time.strptime(self.item['duration'],'%H:%M:%S')
+            s = t + datetime.timedelta(hours=s.tm_hour, minutes=s.tm_min, seconds=s.tm_sec)
             edate = s.strftime('%H:%M')
             title = '[COLOR green]%s\u25b6[/COLOR] %s (%s〜%s)' % (self.item['bc'],self.item['title'],sdate,edate)
         else:
