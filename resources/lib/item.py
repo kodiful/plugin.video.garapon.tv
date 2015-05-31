@@ -29,11 +29,17 @@ class Item:
     def title(self, onair=False):
         if onair:
             try:
-                t = datetime.datetime.strptime(self.item['startdate'], '%Y-%m-%d %H:%M:%S')
+                t = datetime.datetime.strptime(self.item['startdate'],'%Y-%m-%d %H:%M:%S')
             except TypeError:
                 t = datetime.datetime.fromtimestamp(time.mktime(time.strptime(self.item['startdate'],'%Y-%m-%d %H:%M:%S')))
+            try:
+                s = datetime.datetime.strptime(self.item['duration'],'%H:%M:%S')
+            except TypeError:
+                s = datetime.datetime.fromtimestamp(time.mktime(time.strptime(self.item['duration'],'%H:%M:%S')))
+            s = t + datetime.timedelta(hours=s.hour, minutes=s.minute, seconds=s.second)
             sdate = t.strftime('%H:%M')
-            title = '[COLOR green]%s\u25b6[/COLOR] %s (%s〜)' % (self.item['bc'],self.item['title'],sdate)
+            edate = s.strftime('%H:%M')
+            title = '[COLOR green]%s\u25b6[/COLOR] %s (%s〜%s)' % (self.item['bc'],self.item['title'],sdate,edate)
         else:
             title = self.item['title']
         return title
