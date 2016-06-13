@@ -748,28 +748,28 @@ def checkOnAir(programs):
 
 
 def updateOnAir():
-    if xbmcgui.getCurrentWindowId() != 10025:
-        addon_debug('updateOnAir: WindowID doesn\'t match')
-    else:
-        # ウィンドウが書き換えられた時刻
-        timestamp0 = Resume(garapon).get('timestamp', 0)
-        # 番組情報が描画された時刻
-        timestamp1 = Resume(garapon).get('onair', 0)
-        if timestamp0 != timestamp1:
-            addon_debug('updateOnAir: timestamp doesn\'t match')
-        else:
-            # 現在時刻
-            now = time.time()
-            # 番組情報を更新すべき時刻
-            timestamp2 = Resume(garapon).get('onair_update', 0)
-            if now > timestamp2:
-                addon_debug('updateOnAir: xbmc.executebuiltin')
-                xbmc.executebuiltin('XBMC.Container.Refresh')
+    if xbmcgui.getCurrentWindowId() == 10025 and xbmcgui.getCurrentWindowDialogId() == 9999:
+        path = xbmc.getInfoLabel('Container.FolderPath')
+        if path == sys.argv[0] + '?mode=16':
+            # ウィンドウが書き換えられた時刻
+            timestamp0 = Resume(garapon).get('timestamp', 0)
+            # 番組情報が描画された時刻
+            timestamp1 = Resume(garapon).get('onair', 0)
+            if timestamp0 != timestamp1:
+                addon_debug('updateOnAir: timestamp doesn\'t match')
             else:
-                delay = timestamp2 - now + 30
-                if delay < 0: delay = 0
-                addon_debug('updateOnAir: threading.Timer.start: ' + str(delay))
-                threading.Timer(delay, updateOnAir).start()
+                # 現在時刻
+                now = time.time()
+                # 番組情報を更新すべき時刻
+                timestamp2 = Resume(garapon).get('onair_update', 0)
+                if now > timestamp2:
+                    addon_debug('updateOnAir: xbmc.executebuiltin')
+                    xbmc.executebuiltin('XBMC.Container.Refresh')
+                else:
+                    delay = timestamp2 - now + 30
+                    if delay < 0: delay = 0
+                    addon_debug('updateOnAir: threading.Timer.start: ' + str(delay))
+                    threading.Timer(delay, updateOnAir).start()
 
 
 if __name__  == '__main__': main()
