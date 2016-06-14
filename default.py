@@ -430,7 +430,7 @@ def addDir(name, url, mode, description, showcontext='', thumbnail='DefaultFolde
         contextMenu.append((addon.getLocalizedString(30905),action))
     elif showcontext != 'top':
         # トップに戻る
-        contextMenu.append((addon.getLocalizedString(30936),'XBMC.Container.Update(%s)' % (sys.argv[0])))
+        contextMenu.append((addon.getLocalizedString(30936),'XBMC.Container.Update(%s,replace)' % (sys.argv[0])))
     # アドオン設定
     contextMenu.append((addon.getLocalizedString(30937),'XBMC.RunPlugin(%s?mode=82)' % sys.argv[0]))
     listitem.addContextMenuItems(contextMenu, replaceItems=True)
