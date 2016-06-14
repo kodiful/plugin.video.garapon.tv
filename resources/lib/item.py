@@ -183,6 +183,9 @@ class Item:
                 # delete
                 action = 'XBMC.RunPlugin(%s?mode=30&name=%s&url=%s)' % (sys.argv[0],urllib.quote_plus(title),urllib.quote_plus(url4))
                 menu.append((addon.getLocalizedString(30929), action))
+        # return to top
+        contextMenu.append((addon.getLocalizedString(30936),'XBMC.Container.Update(%s,replace)' % (sys.argv[0])))
+
         return menu
 
 
