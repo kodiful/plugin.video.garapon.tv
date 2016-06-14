@@ -200,7 +200,7 @@ def setupSettings():
     settings['favorite'] = 'true'
     settings['download'] = 'false'
     settings['ffmpeg'] = ''
-    
+
     # 必須設定項目をチェック
     if addon.getSetting('garapon_id') == '':
         status = False
@@ -457,8 +457,7 @@ def addItem(item, onair=False):
     # context menu
     listitem.addContextMenuItems(item.contextmenu(sys), replaceItems=True)
     # add directory item
-    url = '%s?url=%s&mode=10' % (sys.argv[0], urllib.quote_plus(item.link()))
-    return xbmcplugin.addDirectoryItem(int(sys.argv[1]), url, listitem, False)
+    return xbmcplugin.addDirectoryItem(int(sys.argv[1]), item.link(), listitem, False)
 
 
 def main():
@@ -494,12 +493,6 @@ def main():
     if mode=='':
         browseGaraponTV('top')
 
-    # play
-    elif mode=='10':
-        item = xbmcgui.ListItem(path=url)
-        xbmc.executebuiltin('XBMC.CECActivateSource')
-        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
-
     # browse
     elif mode=='11':
         browseGaraponTV('date', url)
@@ -527,7 +520,7 @@ def main():
             notify(result)
         else:
             Resume(garapon).set('onair', timestamp)
-            threading.Thread(target=updateOnAir).start()
+            updateOnAir()
 
     # browse downloads
     elif mode=='17':
@@ -594,7 +587,7 @@ def main():
         SmartList().delete(name)
         # refresh top page
         xbmc.executebuiltin('XBMC.Container.Update(%s)' % sys.argv[0])
-        
+
     # settings
     elif mode=='70':
         if addon.getSetting('garapon_auto') == 'true':
@@ -671,7 +664,7 @@ def main():
         Cache().update()
         # open settings
         xbmc.executebuiltin('Addon.OpenSettings(%s)' % garapon)
-    
+
     elif mode=='83':
         # update cache settings
         Cache().update()
@@ -690,8 +683,8 @@ def main():
         # add to smartlist
         SmartList().set(name, url)
         SmartList().add()
-            
-        
+
+
 def syncSession(url):
     # パラメータ抽出
     params = {'credential':'', 'gtvsession':'', 'authtime':''}
@@ -729,7 +722,7 @@ def syncSession(url):
     response.close()
     return 'success'
 
-    
+
 def checkOnAir(programs):
     # 放送中の番組の終了時刻を計算
     enddate = []
@@ -747,29 +740,34 @@ def checkOnAir(programs):
     Resume(garapon).set('onair_update', min(enddate))
 
 
+def updateOnAir1():
+    if xbmcgui.getCurrentWindowId() == 10025:
+        if xbmcgui.getCurrentWindowDialogId() == 9999 or xbmcgui.getCurrentWindowDialogId() == 10138:
+            path = xbmc.getInfoLabel('Container.FolderPath')
+            if path.find(sys.argv[0] + '?mode=16&url=n%3d100%26p%3d1%26video%3dall') > -1:
+                updateOnAir()
+
+
 def updateOnAir():
-    if xbmcgui.getCurrentWindowId() == 10025 and xbmcgui.getCurrentWindowDialogId() == 9999:
-        path = xbmc.getInfoLabel('Container.FolderPath')
-        if path == sys.argv[0] + '?mode=16':
-            # ウィンドウが書き換えられた時刻
-            timestamp0 = Resume(garapon).get('timestamp', 0)
-            # 番組情報が描画された時刻
-            timestamp1 = Resume(garapon).get('onair', 0)
-            if timestamp0 != timestamp1:
-                addon_debug('updateOnAir: timestamp doesn\'t match')
-            else:
-                # 現在時刻
-                now = time.time()
-                # 番組情報を更新すべき時刻
-                timestamp2 = Resume(garapon).get('onair_update', 0)
-                if now > timestamp2:
-                    addon_debug('updateOnAir: xbmc.executebuiltin')
-                    xbmc.executebuiltin('XBMC.Container.Refresh')
-                else:
-                    delay = timestamp2 - now + 30
-                    if delay < 0: delay = 0
-                    addon_debug('updateOnAir: threading.Timer.start: ' + str(delay))
-                    threading.Timer(delay, updateOnAir).start()
+    # ウィンドウが書き換えられた時刻
+    timestamp0 = Resume(garapon).get('timestamp', 0)
+    # 番組情報が描画された時刻
+    timestamp1 = Resume(garapon).get('onair', 0)
+    if timestamp0 != timestamp1:
+        addon_debug('updateOnAir: timestamp doesn\'t match')
+    else:
+        # 現在時刻
+        now = time.time()
+        # 番組情報を更新すべき時刻
+        timestamp2 = Resume(garapon).get('onair_update', 0)
+        if now > timestamp2:
+            addon_debug('updateOnAir: xbmc.executebuiltin')
+            xbmc.executebuiltin('XBMC.Container.Refresh')
+        else:
+            delay = timestamp2 - now + 30
+            if delay < 0: delay = 0
+            addon_debug('updateOnAir: threading.Timer.start: ' + str(delay))
+            threading.Timer(delay, updateOnAir1).start()
 
 
 if __name__  == '__main__': main()
