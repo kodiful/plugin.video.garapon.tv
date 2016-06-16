@@ -19,14 +19,15 @@ from urllib2 import URLError, HTTPError
 
 from resources.lib.common    import(addon,garapon,radiruko,settings)
 from resources.lib.common    import(SETTINGS_FILE,TEMPLATE_FILE)
+from resources.lib.common    import(RESUME_FILE)
 from resources.lib.common    import(isholiday,addon_error,addon_debug,notify)
 
 from resources.lib.item      import(Item,Cache,query2desc)
-from resources.lib.resume    import(Resume)
 from resources.lib.channel   import(Channel)
 from resources.lib.genre     import(Genre)
 from resources.lib.smartlist import(SmartList)
 
+nextAired = 0
 
 def initializeNetwork():
     # リセット
@@ -241,7 +242,8 @@ def searchGaraponTV(squery, onair=False, retry=True): # type(squery)=str, type(r
             for item in sorted(programs, key=lambda item: item['ch']):
                 if item['ts'] == 1: addItem(item, onair)
             # 放送中の番組の終了時刻を計算
-            checkOnAir(programs)
+            global nextAired
+            nextAired = checkOnAir(programs)
         else:
             # 放送済みの番組は時間降順
             for item in sorted(programs, key=lambda item: item['startdate'], reverse=True):
@@ -478,8 +480,6 @@ def main():
     if mode == '' and status == False:
         xbmc.executebuiltin('XBMC.RunPlugin(%s?mode=82)' % sys.argv[0])
         return
-    # 時刻
-    timestamp = Resume(garapon).set('timestamp', int(time.time()))
     # ログ
     addon_debug('mode: %s' % mode)
     addon_debug('url:  %s' % url)
@@ -519,7 +519,6 @@ def main():
         if result != 'success':
             notify(result)
         else:
-            Resume(garapon).set('onair', timestamp)
             updateOnAir()
 
     # browse downloads
@@ -736,38 +735,36 @@ def checkOnAir(programs):
             t = t + datetime.timedelta(seconds=int(a[2]),minutes=int(a[1]),hours=int(a[0]))
             t = time.mktime(t.timetuple())
             enddate.append(int(t))
-    # 直近の終了時刻をファイルに書き込む
-    Resume(garapon).set('onair_update', min(enddate))
+    return min(enddate)
 
 
-def updateOnAir1():
-    if xbmcgui.getCurrentWindowId() == 10025:
-        if xbmcgui.getCurrentWindowDialogId() == 9999 or xbmcgui.getCurrentWindowDialogId() == 10138:
-            path = xbmc.getInfoLabel('Container.FolderPath')
-            if path.find(sys.argv[0] + '?mode=16&url=n%3d100%26p%3d1%26video%3dall') > -1:
-                updateOnAir()
+def updateOnAir1(id):
+    # idをチェック
+    if os.path.isfile(RESUME_FILE) and id == os.path.getmtime(RESUME_FILE):
+        # ウィンドウをチェック
+        path = xbmc.getInfoLabel('Container.FolderPath')
+        if path ==  sys.argv[0] + '?mode=16&url=n%3d100%26p%3d1%26video%3dall':
+            updateOnAir()
 
 
 def updateOnAir():
-    # ウィンドウが書き換えられた時刻
-    timestamp0 = Resume(garapon).get('timestamp', 0)
-    # 番組情報が描画された時刻
-    timestamp1 = Resume(garapon).get('onair', 0)
-    if timestamp0 != timestamp1:
-        addon_debug('updateOnAir: timestamp doesn\'t match')
+    # 現在時刻
+    now = time.time()
+    if now > nextAired:
+        xbmc.executebuiltin('XBMC.Container.Refresh')
+        addon_debug('updateOnAir: xbmc.executebuiltin')
     else:
-        # 現在時刻
-        now = time.time()
-        # 番組情報を更新すべき時刻
-        timestamp2 = Resume(garapon).get('onair_update', 0)
-        if now > timestamp2:
-            addon_debug('updateOnAir: xbmc.executebuiltin')
-            xbmc.executebuiltin('XBMC.Container.Refresh')
-        else:
-            delay = timestamp2 - now + 30
-            if delay < 0: delay = 0
-            addon_debug('updateOnAir: threading.Timer.start: ' + str(delay))
-            threading.Timer(delay, updateOnAir1).start()
+        # 遅延を設定
+        delay = nextAired - now + 30
+        if delay < 0: delay = 0
+        # idを設定
+        f = codecs.open(RESUME_FILE,'w','utf-8')
+        f.write('')
+        f.close()
+        id = os.path.getmtime(RESUME_FILE)
+        # スレッドを起動
+        threading.Timer(delay, updateOnAir1, args=[id]).start()
+        addon_debug('updateOnAir: threading.Timer.start: %d %f' % (id,delay))
 
 
 if __name__  == '__main__': main()
