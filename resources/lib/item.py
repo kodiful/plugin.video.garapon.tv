@@ -130,7 +130,7 @@ class Item:
             if settings['http']:
                 imageurl += ':' + settings['http']
             imageurl += '/thumbs/' + self.item['gtvid']
-            buffer = urllib2.urlopen(imageurl).read() 
+            buffer = urllib2.urlopen(imageurl).read()
             image = Image.open(StringIO(buffer)) #320x180
             if settings['thumb'] == 'Crop':
                 image = image.resize((384, 216))
@@ -183,6 +183,8 @@ class Item:
                 # delete
                 action = 'XBMC.RunPlugin(%s?mode=30&name=%s&url=%s)' % (sys.argv[0],urllib.quote_plus(title),urllib.quote_plus(url4))
                 menu.append((addon.getLocalizedString(30929), action))
+        # return to top
+        menu.append((addon.getLocalizedString(30936),'XBMC.Container.Update(%s,replace)' % (sys.argv[0])))
         return menu
 
 
@@ -212,7 +214,7 @@ def query2desc(query):
 
     params = {'sdate':None, 'ch':None, 'genre0':None, 'genre1':None, 's':None}
     lines = []
-    
+
     # parse query
     for q in query.split('&'):
         (key, value) = q.split('=')

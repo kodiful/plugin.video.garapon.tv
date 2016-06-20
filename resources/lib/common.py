@@ -12,6 +12,8 @@ garapon = 'plugin.video.garapon.tv'
 addon = xbmcaddon.Addon(garapon)
 
 radiruko = 'plugin.audio.kodi.ra'
+try: xbmcaddon.Addon(radiruko)
+except: radiruko = ''
 
 # HTTP接続におけるタイムアウト(秒)
 socket.setdefaulttimeout(60)
@@ -44,6 +46,8 @@ GENRE_FILE = os.path.join(DATA_PATH, 'genre.js')
 
 CHANNEL_FILE = os.path.join(PROFILE_PATH, 'channel.js')
 SMARTLIST_FILE = os.path.join(PROFILE_PATH, 'smartlist.js')
+
+RESUME_FILE = os.path.join(PROFILE_PATH, 'resume.js')
 
 CACHE_DB = os.path.join(DB_PATH, 'Textures13.db')
 
