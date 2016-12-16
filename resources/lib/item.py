@@ -46,7 +46,8 @@ class Item:
             duration = ''
         else:
             match = re.search('^([0-9]{2,}):([0-9]{2}):([0-9]{2})',self.item['duration'])
-            duration = '%d' % (int(match.group(1))*60+int(match.group(2)))
+            #duration = '%d' % (int(match.group(1))*60+int(match.group(2)))
+            duration = '%d' % (int(match.group(1))*3600+int(match.group(2))*60+int(match.group(2)))
         return duration
 
     def date(self):
