@@ -259,7 +259,7 @@ def searchGaraponTV(squery, onair=False, retry=True): # type(squery)=str, type(r
                 hit=hit,
                 page=page+1) + '\n'
             #次のページへ
-            addDir('[COLOR green]%s[/COLOR]' % (addon.getLocalizedString(30922)),squery,15,description,thumbnail='DefaultProgram.png')
+            addDir('[COLOR green]%s[/COLOR]' % (addon.getLocalizedString(30922)),squery,15,description,thumbnail='DefaultAddonsSearch.png')
         # end of directory
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
         return 'success'
@@ -291,17 +291,17 @@ def browseGaraponTV(umode, squery=''): # type(umode)=unicode, type(squery)= str
         if radiruko:
             addDir(addon.getLocalizedString(30931),'',81,addon.getLocalizedString(30932),showcontext='top',thumbnail='DefaultTVShows.png')
         #検索:日付
-        addDir(addon.getLocalizedString(30933),'',11,addon.getLocalizedString(30918),showcontext='top',thumbnail='DefaultProgram.png')
+        addDir(addon.getLocalizedString(30933),'',11,addon.getLocalizedString(30918),showcontext='top',thumbnail='DefaultAddonsSearch.png')
         #検索:チャンネル
-        addDir(addon.getLocalizedString(30934),'',12,addon.getLocalizedString(30918),showcontext='top',thumbnail='DefaultProgram.png')
+        addDir(addon.getLocalizedString(30934),'',12,addon.getLocalizedString(30918),showcontext='top',thumbnail='DefaultAddonsSearch.png')
         #検索:ジャンル
-        addDir(addon.getLocalizedString(30935),'',13,addon.getLocalizedString(30918),showcontext='top',thumbnail='DefaultProgram.png')
+        addDir(addon.getLocalizedString(30935),'',13,addon.getLocalizedString(30918),showcontext='top',thumbnail='DefaultAddonsSearch.png')
         #コレクション:お気に入り
         if settings['favorite'] == 'true':
-            addDir(addon.getLocalizedString(30923),squery+'&rank=all',15,addon.getLocalizedString(30924),showcontext='top',thumbnail='DefaultProgram.png')
+            addDir(addon.getLocalizedString(30923),squery+'&rank=all',15,addon.getLocalizedString(30924),showcontext='top',thumbnail='DefaultFolder.png')
         #コレクション:ダウンロード
         if settings['download'] == 'true':
-            addDir(addon.getLocalizedString(30927),'',17,addon.getLocalizedString(30928),showcontext='top',thumbnail='DefaultProgram.png')
+            addDir(addon.getLocalizedString(30927),'',17,addon.getLocalizedString(30928),showcontext='top',thumbnail='DefaultFolder.png')
         #スマートリスト
         for i in SmartList().getList():
             title = i['title']
@@ -316,7 +316,7 @@ def browseGaraponTV(umode, squery=''): # type(umode)=unicode, type(squery)= str
             mode = 13
         else:
             mode = 15
-        addDir(name,squery+'&sdate=&edate=',mode,description,thumbnail='DefaultProgram.png')
+        addDir(name,squery+'&sdate=&edate=',mode,description,thumbnail='DefaultYear.png')
         #月,火,水,木,金,土,日
         w = addon.getLocalizedString(30920).split(',')
         for i in range(120):
@@ -338,7 +338,7 @@ def browseGaraponTV(umode, squery=''): # type(umode)=unicode, type(squery)= str
                 mode = 13
             else:
                 mode = 15
-            addDir(name,query,mode,description,thumbnail='DefaultProgram.png')
+            addDir(name,query,mode,description,thumbnail='DefaultYear.png')
     elif umode == 'channel':
         for ch in Channel().getList():
             name = ch['name']
@@ -350,7 +350,7 @@ def browseGaraponTV(umode, squery=''): # type(umode)=unicode, type(squery)= str
                 mode = 11
             else:
                 mode = 15
-            addDir(name,query,mode,description,thumbnail='DefaultProgram.png')
+            addDir(name,query,mode,description,thumbnail='DefaultStudios.png')
     elif umode == 'genre':
         for i in Genre().getList():
             name = i['name']
@@ -362,9 +362,9 @@ def browseGaraponTV(umode, squery=''): # type(umode)=unicode, type(squery)= str
                     mode = 11
                 else:
                     mode = 15
-                addDir(name,squery+'&genre0=&genre1=',mode,description,thumbnail='DefaultProgram.png')
+                addDir(name,squery+'&genre0=&genre1=',mode,description,thumbnail='DefaultTags.png')
             else:
-                addDir(name,squery+'&genre0='+id,14,description,thumbnail='DefaultProgram.png')
+                addDir(name,squery+'&genre0='+id,14,description,thumbnail='DefaultTags.png')
     elif umode == 'subgenre':
         genre0 = re.search('&genre0=([0-9]+)',squery).group(1)
         for i in Genre().getList(genre0):
@@ -376,7 +376,7 @@ def browseGaraponTV(umode, squery=''): # type(umode)=unicode, type(squery)= str
                 mode = 11
             else:
                 mode = 15
-            addDir(name,squery+'&genre1='+id,mode,description,thumbnail='DefaultProgram.png')
+            addDir(name,squery+'&genre1='+id,mode,description,thumbnail='DefaultTags.png')
     # end of directory
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
