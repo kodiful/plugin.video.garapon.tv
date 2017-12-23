@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.garapon.tv"
        name="Garapon TV"
-       version="1.0.4"
+       version="1.0.5"
        provider-name="kodiful">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
@@ -18,5 +18,6 @@
     <description lang="ja">ガラポンTVを検索・視聴します</description>
     <disclaimer lang="en">Works on Windows &amp; MacOSX</disclaimer>
     <disclaimer lang="ja">WindowsとMacOSXで動作</disclaimer>
+    <website>http://kodiful.com/</website>
   </extension>
 </addon>
