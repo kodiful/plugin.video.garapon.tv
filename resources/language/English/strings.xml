@@ -22,7 +22,7 @@
   <string id="30103">Autoconfig IP Address &amp; Ports</string>
   <string id="30104">IP Address</string>
   <string id="30105">HTTP Port(default:80)</string>
-  <string id="30106">RTMP Port(default:1935)</string>
+  <string id="30106">HTTPS Port(default:443)</string>
   <string id="30107">[COLOR green]Update Settings[/COLOR]</string>
   <string id="30108">Session ID</string>
   <string id="30109">[COLOR green]Update Session ID[/COLOR]</string>
@@ -55,7 +55,7 @@
   <string id="30913">All</string>
   <string id="30914">All</string>
   <string id="30915">All</string>
-  <string id="30916">[COLOR green]On Air:TV[/COLOR]</string>
+  <string id="30916">[COLOR orange]On Air[/COLOR]</string>
   <string id="30917">Show TV programs on air</string>
   <string id="30918">Search programs</string>
   <string id="30919">%m/%d</string>
@@ -70,7 +70,6 @@
   <string id="30928">Show downloads</string>
   <string id="30929">Add to downloads</string>
   <string id="30930">Remove from downloads</string>
-  <string id="30931">[COLOR green]On Air:Radio[/COLOR]</string>
   <string id="30932">Show radio programs on air</string>
   <string id="30933">[COLOR green]Search:Date[/COLOR]</string>
   <string id="30934">[COLOR green]Search:Channel[/COLOR]</string>

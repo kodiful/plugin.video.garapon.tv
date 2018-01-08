@@ -22,7 +22,7 @@
   <string id="30103">IPアドレス・ポート自動設定</string>
   <string id="30104">IPアドレス</string>
   <string id="30105">HTTPポート(デフォルト:80)</string>
-  <string id="30106">RTMPポート(デフォルト:1935)</string>
+  <string id="30106">HTTPSポート(デフォルト:443)</string>
   <string id="30107">[COLOR green]設定を更新[/COLOR]</string>
   <string id="30108">セッションID</string>
   <string id="30109">[COLOR green]セッションIDを更新[/COLOR]</string>
@@ -55,7 +55,7 @@
   <string id="30913">すべてのチャンネル</string>
   <string id="30914">すべてのジャンル</string>
   <string id="30915">すべてのサブジャンル</string>
-  <string id="30916">[COLOR orange]放送中:テレビ[/COLOR]</string>
+  <string id="30916">[COLOR orange]放送中の番組[/COLOR]</string>
   <string id="30917">現在テレビで放送中の番組を表示します</string>
   <string id="30918">番組を検索します</string>
   <string id="30919">%m月%d日</string>
@@ -70,7 +70,6 @@
   <string id="30928">ダウンロードを表示します</string>
   <string id="30929">ダウンロードに追加</string>
   <string id="30930">ダウンロードから削除</string>
-  <string id="30931">[COLOR orange]放送中:ラジオ[/COLOR]</string>
   <string id="30932">現在ラジオで放送中の番組を表示します</string>
   <string id="30933">[COLOR green]検索:日付[/COLOR]</string>
   <string id="30934">[COLOR green]検索:チャンネル[/COLOR]</string>

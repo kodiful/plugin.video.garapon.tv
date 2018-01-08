@@ -14,18 +14,18 @@
     <setting label="30103" id="garapon_auto" type="bool" default="true"/>
     <setting label="30104" id="garapon_addr" type="ipaddress" default="" enable="eq(-1,false)"/>
     <setting label="30105" id="garapon_http" type="number" default="" enable="eq(-2,false)"/>
-    <setting label="30106" id="garapon_rtmp" type="number" default="" enable="eq(-3,false)"/>
-    <setting label="30107" type="action" option="close" action="RunPlugin(plugin://plugin.video.garapon.tv/?mode=70)" enable="!eq(-5,)+!eq(-6,)"/>
+    <setting label="30106" id="garapon_https" type="number" default="" enable="eq(-3,false)"/>
+    <setting label="30107" type="action" option="close" action="RunPlugin(plugin://$ID/?mode=70)" enable="!eq(-5,)+!eq(-6,)"/>
   </category>
   <category label="30200">
-    <setting label="30201" id="cache" type="action" option="close" action="RunPlugin(plugin://plugin.video.garapon.tv/?mode=80)" default=""/>
-    <setting label="30109" id="garapon_session" type="action" option="close" action="RunPlugin(plugin://plugin.video.garapon.tv/?mode=73)" default=""/>
+    <setting label="30201" id="cache" type="action" option="close" action="RunPlugin(plugin://$ID/?mode=80)" default=""/>
+    <setting label="30109" id="garapon_session" type="action" option="close" action="RunPlugin(plugin://$ID/?mode=73)" default=""/>
     <setting label="30109" id="garapon_authtime" type="text" default="0" visible="false"/>
-    <setting label="30110" id="garapon_ch" type="action" option="close" action="RunPlugin(plugin://plugin.video.garapon.tv/?mode=74)" default=""/>
+    <setting label="30110" id="garapon_ch" type="action" option="close" action="RunPlugin(plugin://$ID/?mode=74)" default=""/>
     <setting label="30204" id="debug" type="bool" default="false"/>
   </category>
   <category label="30000">
-    <setting label="30001" id="channel" type="labelenum" values="[COLOR green]すべてのチャンネル[/COLOR]|ＴＯＫＹＯ ＭＸ|ＮＨＫ総合 東京|ＮＨＫＥテレ 東京|日テレ|ＴＢＳ|フジテレビ|テレビ朝日|テレビ東京"/>
+    <setting label="30001" id="channel" type="labelenum" values="[COLOR green]すべてのチャンネル[/COLOR]|ｔｖｋ|ＮＨＫ総合 東京|ＮＨＫＥテレ 東京|日テレ|ＴＢＳ|フジテレビ|テレビ朝日|テレビ東京"/>
     <setting label="30002" id="genre0"  type="labelenum" values="[COLOR green]すべてのジャンル[/COLOR]|ニュース/報道|スポーツ|情報/ワイドショー|ドラマ|音楽|バラエティー|映画|アニメ/特撮|ドキュメンタリー/教養|劇場/公演|趣味/教育|福祉|その他のジャンル"/>
     <setting label="30003" id="genre00" type="labelenum" values="[COLOR green]すべてのサブジャンル(ニュース/報道)[/COLOR]|定時/総合|天気|特集/ドキュメント|政治/国会|経済/市況|海外/国際|解説|討論/会談|報道特番|ローカル/地域|交通|その他のサブジャンル(ニュース/報道)" visible="eq(-1,1)"/>
     <setting label="30003" id="genre01" type="labelenum" values="[COLOR green]すべてのサブジャンル(スポーツ)[/COLOR]|スポーツニュース|野球|サッカー|ゴルフ|その他の球技|相撲/格闘技|オリンピック/国際大会|マラソン/陸上/水泳|モータースポーツ|マリン/ウィンタースポーツ|競馬/公営競技|その他のサブジャンル(スポーツ)" visible="eq(-2,2)"/>
@@ -42,7 +42,7 @@
     <setting label="30004" id="source"  type="enum" lvalues="30901|30902"/>
     <setting label="30005" id="keyword" type="text"/>
     <setting id="query" type="text" label="" visible="False"/>
-    <setting label="30006" type="action" option="close" action="RunPlugin(plugin://plugin.video.garapon.tv/?mode=62)" enable="!eq(-2,)" visible="eq(-1,)"/>
-    <setting label="30007" type="action" option="close" action="RunPlugin(plugin://plugin.video.garapon.tv/?mode=62)" enable="!eq(-3,)" visible="!eq(-2,)"/>
+    <setting label="30006" type="action" option="close" action="RunPlugin(plugin://$ID/?mode=62)" enable="!eq(-2,)" visible="eq(-1,)"/>
+    <setting label="30007" type="action" option="close" action="RunPlugin(plugin://$ID/?mode=62)" enable="!eq(-3,)" visible="!eq(-2,)"/>
   </category>
 </settings>

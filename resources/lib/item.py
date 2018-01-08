@@ -97,21 +97,10 @@ class Item:
             return ', '.join(buf)
 
     def link(self):
-        if settings['protocol'] == 'RTMP':
-            link = 'rtmp://' + settings['addr']
-            if settings['rtmp']:
-                link += ':' + settings['rtmp']
-            link += ' playpath=' + self.item['gtvid'] + '-' + settings['session']
-        elif settings['protocol'] == 'RTMPT':
-            link = 'rtmpt://' + settings['addr']
-            if settings['http']:
-                link += ':' + settings['http']
-            link += ' playpath=' + self.item['gtvid'] + '-' + settings['session'] + '-' + settings['dev_id']
-        elif settings['protocol'] == 'HLS':
-            link = 'http://' + settings['addr']
-            if settings['http']:
-                link += ':' + settings['http']
-            link += '/' + self.item['gtvid'] + '.m3u8?gtvsession=' + settings['session'] + '&starttime=0&dev_id=' + settings['dev_id']
+        link = 'http://' + settings['addr']
+        if settings['http']:
+            link += ':' + settings['http']
+        link += '/' + self.item['gtvid'] + '.m3u8?gtvsession=' + settings['session'] + '&starttime=0&dev_id=' + settings['dev_id']
         return link
 
     def thumbnail(self):
@@ -133,15 +122,10 @@ class Item:
             imageurl += '/thumbs/' + self.item['gtvid']
             buffer = urllib2.urlopen(imageurl).read()
             image = Image.open(StringIO(buffer)) #320x180
-            if settings['thumb'] == 'Crop':
-                image = image.resize((384, 216))
-                image = image.crop((84,0,300,216))
-                image.save(imagefile, 'PNG')
-            elif settings['thumb'] == 'Fit':
-                image = image.resize((216, 122))
-                background = Image.new('RGB', (216,216), (0,0,0))
-                background.paste(image, (0,47))
-                background.save(imagefile, 'PNG')
+            image = image.resize((216, 122))
+            background = Image.new('RGB', (216,216), (0,0,0))
+            background.paste(image, (0,47))
+            background.save(imagefile, 'PNG')
         return imagefile
 
     def contextmenu(self, sys):

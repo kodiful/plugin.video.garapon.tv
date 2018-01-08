@@ -17,7 +17,7 @@ import xbmcaddon
 
 from urllib2 import URLError, HTTPError
 
-from resources.lib.common    import(addon,garapon,radiruko,settings)
+from resources.lib.common    import(addon,settings)
 from resources.lib.common    import(SETTINGS_FILE,TEMPLATE_FILE)
 from resources.lib.common    import(RESUME_FILE)
 from resources.lib.common    import(isholiday,addon_error,addon_debug,notify)
@@ -33,7 +33,7 @@ def initializeNetwork():
     # リセット
     addon.setSetting('garapon_addr', '')
     addon.setSetting('garapon_http', '')
-    addon.setSetting('garapon_rtmp', '')
+    addon.setSetting('garapon_https', '')
     # データ取得
     garapon_id = addon.getSetting('garapon_id')
     garapon_pw = addon.getSetting('garapon_pw')
@@ -69,10 +69,10 @@ def initializeNetwork():
         addon.setSetting('garapon_addr', params['ipaddr'])
         if params['ipaddr'] == params['gipaddr']:
             addon.setSetting('garapon_http', params['port'])
-            addon.setSetting('garapon_rtmp', params['port2'])
+            addon.setSetting('garapon_https', params['port2'])
         else:
             addon.setSetting('garapon_http', '')
-            addon.setSetting('garapon_rtmp', '')
+            addon.setSetting('garapon_https', '')
         message = 'success'
     else:
         addon_error('initializeNetwork: status: %s' % params['message'])
@@ -86,7 +86,7 @@ def initializeSession():
     # データ取得
     garapon_addr = addon.getSetting('garapon_addr')
     garapon_http = addon.getSetting('garapon_http')
-    garapon_rtmp = addon.getSetting('garapon_rtmp')
+    garapon_https = addon.getSetting('garapon_https')
     garapon_id = addon.getSetting('garapon_id')
     garapon_pw = addon.getSetting('garapon_pw')
     url = 'http://' + garapon_addr
@@ -127,7 +127,7 @@ def initializeChannel():
     # データ取得
     garapon_addr = addon.getSetting('garapon_addr')
     garapon_http = addon.getSetting('garapon_http')
-    garapon_rtmp = addon.getSetting('garapon_rtmp')
+    garapon_https = addon.getSetting('garapon_https')
     gtvsession = addon.getSetting('garapon_session')
     url = 'http://' + garapon_addr
     if garapon_http:
@@ -188,16 +188,12 @@ def setupSettings():
     # 設定を格納
     settings['addr'] = addon.getSetting('garapon_addr')
     settings['http'] = addon.getSetting('garapon_http')
-    settings['rtmp'] = addon.getSetting('garapon_rtmp')
+    settings['https'] = addon.getSetting('garapon_https')
     settings['session'] = addon.getSetting('garapon_session')
     settings['authtime'] = addon.getSetting('garapon_authtime')
-    #settings['protocol'] = addon.getSetting('protocol')
-    #settings['thumb'] = addon.getSetting('thumb')
     #settings['favorite'] = addon.getSetting('favorite')
     #settings['download'] = addon.getSetting('download')
     #settings['ffmpeg'] = addon.getSetting('ffmpeg')
-    settings['protocol'] = 'HLS'
-    settings['thumb'] = 'Fit'
     settings['favorite'] = 'true'
     settings['download'] = 'false'
     settings['ffmpeg'] = ''
@@ -287,9 +283,6 @@ def browseGaraponTV(umode, squery=''): # type(umode)=unicode, type(squery)= str
     if umode == 'top':
         #放送中:テレビ
         addDir(addon.getLocalizedString(30916),squery,16,addon.getLocalizedString(30917),showcontext='top',thumbnail='DefaultTVShows.png')
-        #放送中:ラジオ
-        if radiruko:
-            addDir(addon.getLocalizedString(30931),'',81,addon.getLocalizedString(30932),showcontext='top',thumbnail='DefaultTVShows.png')
         #検索:日付
         addDir(addon.getLocalizedString(30933),'',11,addon.getLocalizedString(30918),showcontext='top',thumbnail='DefaultAddonsSearch.png')
         #検索:チャンネル
@@ -407,12 +400,17 @@ def manageFavorites(squery):
 
 
 def browseDownloads():
-    list = Downloads().getList()
-    if len(list) > 0:
-        squery = 'n=%d&p=1&video=all&gtvidlist=%s' % (settings['apage'], ','.join(list))
-        searchGaraponTV(squery, onair=False, retry=True)
-    else:
-        xbmcplugin.endOfDirectory(int(sys.argv[1]))
+    # 検索結果
+    response_body = Downloads().getList()
+    response_data = json.loads(response_body)
+    # 検索結果の番組
+    programs = response_data['program']
+    # 放送済みの番組は時間降順
+    for item in sorted(programs, key=lambda item: item['startdate'], reverse=True):
+        if item['ts'] == 1: addItem(item)
+    # end of directory
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
+    return 'success'
 
 
 def addDir(name, url, mode, description, showcontext='', thumbnail='DefaultFolder.png'):
@@ -651,10 +649,6 @@ def main():
         Cache().clear()
         Cache().update()
 
-    # radiruko
-    elif mode=='81':
-        xbmc.executebuiltin('XBMC.RunAddon(%s)' % radiruko)
-
     # settings
     elif mode=='82':
         # clear smartlist
@@ -662,13 +656,13 @@ def main():
         # update cache settings
         Cache().update()
         # open settings
-        xbmc.executebuiltin('Addon.OpenSettings(%s)' % garapon)
+        xbmc.executebuiltin('Addon.OpenSettings(%s)' % xbmcaddon.Addon().getAddonInfo('id'))
 
     elif mode=='83':
         # update cache settings
         Cache().update()
         # open settings & focus smartlist category
-        xbmc.executebuiltin('Addon.OpenSettings(%s)' % garapon)
+        xbmc.executebuiltin('Addon.OpenSettings(%s)' % xbmcaddon.Addon().getAddonInfo('id'))
         xbmc.executebuiltin('SetFocus(102)') # smartlist category which is the 3rd
         xbmc.executebuiltin('SetFocus(215)') # keyword control which is the 16th including hidden controls
 

@@ -8,12 +8,7 @@ import xbmc
 import xbmcaddon
 
 # アドオン情報
-garapon = 'plugin.video.garapon.tv'
-addon = xbmcaddon.Addon(garapon)
-
-radiruko = 'plugin.audio.kodi.ra'
-try: xbmcaddon.Addon(radiruko)
-except: radiruko = ''
+addon = xbmcaddon.Addon()
 
 # HTTP接続におけるタイムアウト(秒)
 socket.setdefaulttimeout(60)
