@@ -7,7 +7,9 @@ import time
 import codecs
 import json
 import urlparse
+import xbmcgui, xbmcplugin
 
+from common import log
 from const import Const
 from channel import Channel
 from genre import Genre
@@ -142,9 +144,8 @@ def remotePlay(url):
     args = urlparse.parse_qs(o.query)
     for key in args.keys(): args[key] = args[key][0]
     # 再生
-    url = Request().content_url(gtvpath=o.path, starttime=args.get('starttime',0))
-    listitem = xbmcgui.ListItem(path=url)
-    xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, listitem)
+    url = Request().content_url(gtvid=o.path, starttime=args.get('starttime',0))
+    xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path=url))
 
 #-------------------------------------------------------------------------------
 def remoteSyncSession(url):
