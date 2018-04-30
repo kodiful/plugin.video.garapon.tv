@@ -60,7 +60,7 @@ def main():
     elif mode=='16':
         Browse('%s&dt=e&sdate=%s' % (url,datetime.datetime.today().strftime('%Y-%m-%d %H:%M:%S'))).search(onair=True)
 
-    # manage favorites
+    # switch favorites
     elif mode=='20':
         Browse(url).favorites()
 
@@ -156,5 +156,7 @@ def main():
         # add to smartlist
         SmartList().set(name, url)
         SmartList().add()
+        # refresh top page
+        xbmc.executebuiltin('Container.Update(%s)' % sys.argv[0])
 
 if __name__  == '__main__': main()
