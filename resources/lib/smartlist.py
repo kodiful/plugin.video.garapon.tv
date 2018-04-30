@@ -4,24 +4,22 @@ from __future__ import unicode_literals
 
 import os
 import codecs
-import urllib
+import urllib, urlparse
 import json
 
-from common import(addon,settings)
-from common import(SMARTLIST_FILE)
+from channel import Channel
+from genre import Genre
+from const import Const
 
-from channel import(Channel)
-from genre import(Genre)
-
-
+#-------------------------------------------------------------------------------
 class SmartList():
-    
+
     def __init__(self):
         return
 
     def getList(self):
-        if os.path.exists(SMARTLIST_FILE):
-            f = codecs.open(SMARTLIST_FILE,'r','utf-8')
+        if os.path.exists(Const.SMARTLIST_FILE):
+            f = codecs.open(Const.SMARTLIST_FILE,'r','utf-8')
             list = json.loads(f.read())
             f.close()
         else:
@@ -32,7 +30,7 @@ class SmartList():
         # queryでソート
         list = sorted(list, key=lambda item: item['query'])
         # ファイルに書き込む
-        f = codecs.open(SMARTLIST_FILE,'w','utf-8')
+        f = codecs.open(Const.SMARTLIST_FILE,'w','utf-8')
         f.write(json.dumps(list))
         f.close()
 
@@ -51,34 +49,36 @@ class SmartList():
                    'genre09',
                    'genre10',
                    'genre11']:
-            addon.setSetting(id, '')
+            Const.SET(id, '')
         for id in ['keyword','query']:
-            addon.setSetting(id, '')
+            Const.SET(id, '')
         for id in ['source']:
-            addon.setSetting(id, '0')
+            Const.SET(id, '0')
 
-    def set(self, uname, squery):
+    def set(self, uname, query):
         # リセット
         self.clear()
         # ダイアログに設定
-        params = {'s':'', 'ch':'', 'genre0':'', 'genre1':''}
-        for i in squery[1:].split('&'):
-            key, value = i.split('=')
-            params[key] = value
+        args = urlparse.parse_qs(query)
+        for key in args.keys(): args[key] = args[key][0]
         # keyword
-        addon.setSetting('keyword', uname)
+        Const.SET('keyword', uname)
         # source
-        if params['s'] == 'e':
-            addon.setSetting('source', '0')
-        elif params['s'] == 'c':
-            addon.setSetting('source', '1')
+        s = args.get('s','')
+        if s == 'e':
+            Const.SET('source', '0')
+        elif s == 'c':
+            Const.SET('source', '1')
         # channel
-        channel = Channel().search(params['ch'])
-        addon.setSetting('channel',channel['name'])
+        ch = args.get('ch','')
+        channel = Channel().search(ch)
+        Const.SET('channel',channel['name'])
         # genre
-        genre = Genre().search(params['genre0'],params['genre1'])
-        addon.setSetting('genre0',genre['name0'])
-        addon.setSetting(genre['id'],genre['name1'])
+        genre0 = args.get('genre0','')
+        genre1 = args.get('genre1','')
+        genre = Genre().search(genre0, genre1)
+        Const.SET('genre0',genre['name0'])
+        Const.SET(genre['id'],genre['name1'])
 
     def edit(self, uname):
         # リセット
@@ -90,23 +90,23 @@ class SmartList():
             if list[i]['title'] == uname:
                 item = list[i]
                 for key in item.keys():
-                    addon.setSetting(key, item[key])
+                    Const.SET(key, item[key])
                 break
 
     def add(self):
         # ダイアログの設定を取得
-        source = addon.getSetting('source') # type(source)=str
-        keyword = addon.getSetting('keyword') # type(keyword)=str
+        source = Const.GET('source') # type(source)=str
+        keyword = Const.GET('keyword') # type(keyword)=str
         # channel
-        str2 = addon.getSetting('channel').decode('utf-8') # type(str2)=unicode
+        str2 = Const.GET('channel').decode('utf-8') # type(str2)=unicode
         channel = Channel().search(str2)
         # genre
-        str0 = addon.getSetting('genre0').decode('utf-8') # type(str0)=unicode
+        str0 = Const.GET('genre0').decode('utf-8') # type(str0)=unicode
         genre = Genre().search(str0)
-        str1 = addon.getSetting(genre['id']).decode('utf-8') # type(str1)=unicode
+        str1 = Const.GET(genre['id']).decode('utf-8') # type(str1)=unicode
         genre = Genre().search(str0, str1)
         # query
-        query = 'n='+str(settings['apage'])+'&p=1&video=all'
+        query = 'n='+str(Const.ITEMS)+'&p=1&video=all'
         query += '&key='+urllib.quote(keyword)
         query += '&s='+['e','c'][int(source)]
         query += '&ch='+channel['id']
@@ -115,7 +115,7 @@ class SmartList():
         # 既存のスマートリスト設定
         list = self.getList()
         # 既存のスマートリスト設定でqueryが一致するものを削除
-        edited_query = addon.getSetting('query')
+        edited_query = Const.GET('query')
         for i in range(len(list)):
             if list[i]['query'] == edited_query:
                 del list[i]

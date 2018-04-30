@@ -6,15 +6,14 @@ import os
 import codecs
 import json
 
-from common import(addon)
-from common import(CHANNEL_FILE)
+from const import Const
 
-
+#-------------------------------------------------------------------------------
 class Channel():
-    
+
     def __init__(self):
-        if os.path.isfile(CHANNEL_FILE):
-            f = codecs.open(CHANNEL_FILE,'r','utf-8')
+        if os.path.isfile(Const.CHANNEL_FILE):
+            f = codecs.open(Const.CHANNEL_FILE,'r','utf-8')
             self.data = json.loads(f.read())
             f.close()
 
@@ -33,7 +32,7 @@ class Channel():
         return result
 
     def setData(self, data):
-        f = codecs.open(CHANNEL_FILE,'w','utf-8')
+        f = codecs.open(Const.CHANNEL_FILE,'w','utf-8')
         f.write(json.dumps(data))
         f.close()
 
@@ -41,7 +40,7 @@ class Channel():
         return self.data
 
     def getList(self):
-        data = [{'id':'', 'name':'[COLOR green]%s[/COLOR]' % (addon.getLocalizedString(30913))}] #すべてのチャンネル
+        data = [{'id':'', 'name':'[COLOR green]%s[/COLOR]' % (Const.STR(30913))}] #すべてのチャンネル
         for key, value in self.data['ch_list'].iteritems():
             data.append({'id':key, 'name':value['ch_name']})
         return sorted(data, key=lambda item: item['id'])

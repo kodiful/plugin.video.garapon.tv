@@ -6,14 +6,14 @@ import os
 import codecs
 import json
 
-from common import(GENRE_FILE)
+from const import Const
 
-
+#-------------------------------------------------------------------------------
 class Genre():
-    
+
     def __init__(self):
-        if os.path.isfile(GENRE_FILE):
-            f = codecs.open(GENRE_FILE,'r','utf-8')
+        if os.path.isfile(Const.GENRE_FILE):
+            f = codecs.open(Const.GENRE_FILE,'r','utf-8')
             self.data = json.loads(f.read())
             f.close()
 

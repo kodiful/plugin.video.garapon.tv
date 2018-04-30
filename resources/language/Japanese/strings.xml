@@ -32,16 +32,6 @@
   <string id="30202">サムネイル</string>
   <string id="30203">ストリーミング</string>
   <string id="30204">デバッグ</string>
-  <string id="30300">プライベート</string>
-  <string id="30301">ダウンロード</string>
-  <string id="30302">フォルダのパス</string>
-  <string id="30303">フォルダのURL</string>
-  <string id="30304">トランスコーディング</string>
-  <string id="30305">[COLOR green]フォルダをクリア[/COLOR]</string>
-  <string id="30306">お気に入り</string>
-  <string id="30307">セッションID変更を通知</string>
-  <string id="30308">通知先のURL</string>
-  <string id="30309">[COLOR green]RSSを更新[/COLOR]</string>
   <string id="30903">スマートリストに追加</string>
   <string id="30904">スマートリストを編集</string>
   <string id="30905">スマートリストを削除</string>
@@ -66,10 +56,6 @@
   <string id="30924">ガラポンTV本体に保存されているお気に入りを表示します</string>
   <string id="30925">お気に入りに追加</string>
   <string id="30926">お気に入りから削除</string>
-  <string id="30927">[COLOR yellow]ダウンロード[/COLOR]</string>
-  <string id="30928">ダウンロードを表示します</string>
-  <string id="30929">ダウンロードに追加</string>
-  <string id="30930">ダウンロードから削除</string>
   <string id="30932">現在ラジオで放送中の番組を表示します</string>
   <string id="30933">[COLOR green]検索:日付[/COLOR]</string>
   <string id="30934">[COLOR green]検索:チャンネル[/COLOR]</string>

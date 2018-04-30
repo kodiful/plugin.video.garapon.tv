@@ -32,16 +32,6 @@
   <string id="30202">Thumbnails</string>
   <string id="30203">Streaming</string>
   <string id="30204">Debug</string>
-  <string id="30300">Private</string>
-  <string id="30301">Downloads</string>
-  <string id="30302">Path to Folder</string>
-  <string id="30303">URL to Folder</string>
-  <string id="30304">Transcoding</string>
-  <string id="30305">[COLOR green]Clear Folder[/COLOR]</string>
-  <string id="30306">Favorites</string>
-  <string id="30307">Session ID Notification</string>
-  <string id="30308">Notification URL</string>
-  <string id="30309">[COLOR green]Update RSS[/COLOR]</string>
   <string id="30903">Add as smartlist</string>
   <string id="30904">Edit smartlist</string>
   <string id="30905">Remove smartlist</string>
@@ -66,10 +56,6 @@
   <string id="30924">Show favorites</string>
   <string id="30925">Add to favorites</string>
   <string id="30926">Remove from favorites</string>
-  <string id="30927">[COLOR green]Downloads[/COLOR]</string>
-  <string id="30928">Show downloads</string>
-  <string id="30929">Add to downloads</string>
-  <string id="30930">Remove from downloads</string>
   <string id="30932">Show radio programs on air</string>
   <string id="30933">[COLOR green]Search:Date[/COLOR]</string>
   <string id="30934">[COLOR green]Search:Channel[/COLOR]</string>

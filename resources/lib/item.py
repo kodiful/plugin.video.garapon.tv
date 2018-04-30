@@ -3,8 +3,8 @@
 from __future__ import unicode_literals
 
 import datetime, time
-import re, os
-import urllib, urllib2
+import re, os, sys
+import urllib
 
 from PIL import Image
 from cStringIO import StringIO
@@ -14,19 +14,30 @@ try:
 except:
     from pysqlite2 import dbapi2 as sqlite
 
-from common import(addon,settings)
-from common import(DOWNLOAD_PATH,CACHE_PATH,CACHE_DB)
+from channel import Channel
+from genre import Genre
+from const import Const
+from request import Request
 
-from channel import(Channel)
-from genre import(Genre)
+#-------------------------------------------------------------------------------
+class Item():
 
-
-class Item:
-
-    def __init__(self, item):
+    def __init__(self, item, onair=False):
+        # JSONオブジェクトを格納する
         self.item = item
+        # プロパティを抽出する
+        self.title       = self.get_title(onair)
+        self.duration    = self.get_duration(onair)
+        self.date        = self.get_date()
+        self.outline     = self.get_outline()
+        self.plot        = self.get_plot()
+        self.studio      = self.get_studio()
+        self.genre       = self.get_genre()
+        self.link        = self.get_link()
+        self.thumbnail   = self.get_thumbnail()
+        self.contextmenu = self.get_contextmenu()
 
-    def title(self, onair=False):
+    def get_title(self, onair=False):
         if onair:
             try:
                 t = datetime.datetime.strptime(self.item['startdate'],'%Y-%m-%d %H:%M:%S')
@@ -41,7 +52,7 @@ class Item:
             title = self.item['title']
         return title
 
-    def duration(self, onair=False):
+    def get_duration(self, onair=False):
         if onair:
             duration = ''
         else:
@@ -50,19 +61,19 @@ class Item:
             duration = '%d' % (int(match.group(1))*3600+int(match.group(2))*60+int(match.group(2)))
         return duration
 
-    def date(self):
+    def get_date(self):
         match = re.search('^([0-9]{4})-([0-9]{2})-([0-9]{2})',self.item['startdate'])
         date = '%s.%s.%s' % (match.group(3),match.group(2),match.group(1))
         return date
 
-    def outline(self):
+    def get_outline(self):
         outline = ''
         if self.item['description'] is None:
             return ''
         else:
             return ' ' + self.item['description']
 
-    def plot(self):
+    def get_plot(self):
         plot = self.item['startdate']
         if not self.item['description'] is None:
             plot += '\n' + self.item['description']
@@ -76,13 +87,13 @@ class Item:
             pass
         return plot
 
-    def studio(self):
+    def get_studio(self):
         if self.item['bc'] is None:
             return ''
         else:
             return self.item['bc']
 
-    def genre(self):
+    def get_genre(self):
         if self.item['genre'] is None:
             return ''
         else:
@@ -96,31 +107,23 @@ class Item:
                     buf.append(genre['name0'])
             return ', '.join(buf)
 
-    def link(self):
-        link = 'http://' + settings['addr']
-        if settings['http']:
-            link += ':' + settings['http']
-        link += '/' + self.item['gtvid'] + '.m3u8?gtvsession=' + settings['session'] + '&starttime=0&dev_id=' + settings['dev_id']
-        return link
+    def get_link(self):
+        return Request().content_url(gtvid=self.item['gtvid'])
 
-    def thumbnail(self):
-        imagefile = os.path.join(CACHE_PATH, self.item['gtvid']+'.png')
+    def get_thumbnail(self):
+        imagefile = os.path.join(Const.CACHE_PATH, '%s.png' % self.item['gtvid'])
         if os.path.isfile(imagefile) and os.path.getsize(imagefile) < 1000:
             # delete imagefile
             os.remove(imagefile)
             # delete from database
-            conn = sqlite.connect(CACHE_DB)
+            conn = sqlite.connect(Const.CACHE_DB)
             c = conn.cursor()
             #c.execute("SELECT cachedurl FROM texture WHERE url = '%s';" % imagefile)
             c.execute("DELETE FROM texture WHERE url = '%s';" % imagefile)
             conn.commit()
             conn.close()
         if not os.path.isfile(imagefile):
-            imageurl = 'http://' + settings['addr']
-            if settings['http']:
-                imageurl += ':' + settings['http']
-            imageurl += '/thumbs/' + self.item['gtvid']
-            buffer = urllib2.urlopen(imageurl).read()
+            buffer = Request().thumbnail(gtvid=self.item['gtvid'])
             image = Image.open(StringIO(buffer)) #320x180
             image = image.resize((216, 122))
             background = Image.new('RGB', (216,216), (0,0,0))
@@ -128,11 +131,12 @@ class Item:
             background.save(imagefile, 'PNG')
         return imagefile
 
-    def contextmenu(self, sys):
+    def get_contextmenu(self):
         title = self.item['title'].encode('utf-8','ignore')
         menu = []
         # info
-        menu.append((addon.getLocalizedString(30906), 'XBMC.Action(Info)'))
+        action = 'Action(Info)'
+        menu.append((Const.STR(30906), action))
         # add smartlist
         try:
             if self.item['genre'][0]:
@@ -142,106 +146,55 @@ class Item:
         except:
             genre = ['','']
         url1 = 'ch=%s&genre0=%s&genre1=%s' % (self.item['ch'], genre[0], genre[1])
-        menu.append((addon.getLocalizedString(30903),
-                     'XBMC.RunPlugin(%s?mode=61&name=%s&url=%s)' % (sys.argv[0],urllib.quote_plus(title),urllib.quote_plus(url1))))
+        action = 'RunPlugin(%s?mode=61&name=%s&url=%s)' % (sys.argv[0],urllib.quote_plus(title),urllib.quote_plus(url1))
+        menu.append((Const.STR(30903), action))
         # favorite
-        if settings['favorite'] == 'true':
-            url2 = 'gtvid=%s&rank=1' % (self.item['gtvid'])
-            url3 = 'gtvid=%s&rank=0' % (self.item['gtvid'])
-            if self.item['favorite'] == '0':
-                # add
-                action = 'XBMC.RunPlugin(%s?mode=20&name=%s&url=%s)' % (sys.argv[0],urllib.quote_plus(title),urllib.quote_plus(url2))
-                menu.append((addon.getLocalizedString(30925), action))
-            else:
-                # delete
-                action = 'XBMC.RunPlugin(%s?mode=20&name=%s&url=%s)' % (sys.argv[0],urllib.quote_plus(title),urllib.quote_plus(url3))
-                menu.append((addon.getLocalizedString(30926), action))
+        url2 = 'gtvid=%s&rank=1' % (self.item['gtvid'])
+        url3 = 'gtvid=%s&rank=0' % (self.item['gtvid'])
+        if self.item['favorite'] == '0':
+            # add
+            action = 'RunPlugin(%s?mode=20&name=%s&url=%s)' % (sys.argv[0],urllib.quote_plus(title),urllib.quote_plus(url2))
+            menu.append((Const.STR(30925), action))
+        else:
+            # delete
+            action = 'RunPlugin(%s?mode=20&name=%s&url=%s)' % (sys.argv[0],urllib.quote_plus(title),urllib.quote_plus(url3))
+            menu.append((Const.STR(30926), action))
         # download
-        if settings['download'] == 'true':
+        if Const.PLUS_ADDON:
             url4 = 'gtvid=%s' % (self.item['gtvid'])
-            json = os.path.join(DOWNLOAD_PATH, self.item['gtvid']+'.js')
+            json = os.path.join(Const.DOWNLOAD_PATH, self.item['gtvid']+'.js')
             if os.path.isfile(json):
-                # add
-                action = 'XBMC.RunPlugin(%s?mode=31&name=%s&url=%s)' % (sys.argv[0],urllib.quote_plus(title),urllib.quote_plus(url4))
-                menu.append((addon.getLocalizedString(30930), action))
-            else:
                 # delete
-                action = 'XBMC.RunPlugin(%s?mode=30&name=%s&url=%s)' % (sys.argv[0],urllib.quote_plus(title),urllib.quote_plus(url4))
-                menu.append((addon.getLocalizedString(30929), action))
+                action = 'RunPlugin(plugin://%s?action=delete&gtvid=%s)' % (Const.PLUS_ADDON_ID,urllib.quote_plus(self.item['gtvid']))
+                menu.append((Const.PLUS_ADDON.getLocalizedString(30930), action))
+            else:
+                # add
+                action = 'RunPlugin(plugin://%s?action=add&gtvid=%s)' % (Const.PLUS_ADDON_ID,urllib.quote_plus(self.item['gtvid']))
+                menu.append((Const.PLUS_ADDON.getLocalizedString(30929), action))
         # return to top
-        menu.append((addon.getLocalizedString(30936),'XBMC.Container.Update(%s,replace)' % (sys.argv[0])))
+        action = 'Container.Update(plugin://%s,replace)' % Const.ADDON_ID
+        menu.append((Const.STR(30936), action))
         return menu
 
-
-class Cache:
+#-------------------------------------------------------------------------------
+class Cache():
 
     def __init__(self):
-        self.files = os.listdir(CACHE_PATH)
+        self.files = os.listdir(Const.CACHE_PATH)
 
     def clear(self):
         for file in self.files:
-            try: os.remove(os.path.join(CACHE_PATH, file))
+            try: os.remove(os.path.join(Const.CACHE_PATH, file))
             except: pass
 
     def update(self):
         size = 0
         for file in self.files:
-            try: size = size + os.path.getsize(os.path.join(CACHE_PATH, file))
+            try: size = size + os.path.getsize(os.path.join(Const.CACHE_PATH, file))
             except: pass
         if size > 1024*1024:
-            addon.setSetting('cache', '%.1f MB / %d files' % (size/1024.0/1024.0,len(self.files)))
+            Const.SET('cache', '%.1f MB / %d files' % (size/1024.0/1024.0,len(self.files)))
         elif size > 1024:
-            addon.setSetting('cache', '%.1f kB / %d files' % (size/1024.0,len(self.files)))
+            Const.SET('cache', '%.1f kB / %d files' % (size/1024.0,len(self.files)))
         else:
-            addon.setSetting('cache', '%d bytes / %d files' % (size,len(self.files)))
-
-def query2desc(query):
-
-    params = {'sdate':None, 'ch':None, 'genre0':None, 'genre1':None, 's':None}
-    lines = []
-
-    # parse query
-    for q in query.split('&'):
-        (key, value) = q.split('=')
-        params[key] = value
-
-    # date
-    if params['sdate'] is None:
-        pass
-    elif params['sdate'] == '':
-        lines.append('%s:%s' % (addon.getLocalizedString(30907),addon.getLocalizedString(30912))) #日付:すべての日付
-    else:
-        lines.append('%s:%s' % (addon.getLocalizedString(30907),str(params['sdate']).split(' ')[0])) #日付:*
-
-    # channel
-    if params['ch'] is None:
-        pass
-    elif params['ch'] == '':
-        lines.append('%s:%s' % (addon.getLocalizedString(30908),addon.getLocalizedString(30913))) #チャンネル:すべてのチャンネル
-    else:
-        lines.append('%s:%s' % (addon.getLocalizedString(30908),Channel().search(params['ch'])['name'])) #チャンネル:*
-
-    # genre
-    if params['genre0'] is None:
-        pass
-    elif params['genre0'] == '':
-        lines.append('%s:%s' % (addon.getLocalizedString(30909),addon.getLocalizedString(30914))) #ジャンル:すべてのジャンル
-    else:
-        # subgenre
-        if params['genre1'] is None:
-            pass
-        elif params['genre1'] == '':
-            lines.append('%s:%s' % (addon.getLocalizedString(30909),Genre().search(params['genre0'])['name0'])) #ジャンル:*
-        else:
-            lines.append('%s:%s' % (addon.getLocalizedString(30909),Genre().search(params['genre0'],params['genre1'])['name1'])) #ジャンル:*
-
-    # search
-    if params['s'] is None:
-        pass
-    elif params['s'] == 'e':
-        lines.append('%s:%s' % (addon.getLocalizedString(30911),addon.getLocalizedString(30901))) #検索対象:EPG
-    elif params['s'] == 'c':
-        lines.append('%s:%s' % (addon.getLocalizedString(30911),addon.getLocalizedString(30902))) #検索対象:字幕
-
-    # join lines
-    return '\n'.join(lines)
+            Const.SET('cache', '%d bytes / %d files' % (size,len(self.files)))
