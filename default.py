@@ -78,7 +78,7 @@ def main():
     elif mode=='62':
         SmartList().add()
         # refresh top page
-        xbmc.executebuiltin('Container.Update(%s)' % sys.argv[0])
+        xbmc.executebuiltin('Container.Update(%s,replace)' % sys.argv[0])
 
     elif mode=='63':
         SmartList().edit(name)
@@ -88,50 +88,50 @@ def main():
     elif mode=='64':
         SmartList().delete(name)
         # refresh top page
-        xbmc.executebuiltin('Container.Update(%s)' % sys.argv[0])
+        xbmc.executebuiltin('Container.Update(%s,replace)' % sys.argv[0])
 
     # settings
     elif mode=='70':
         if Const.GET('garapon_auto') == 'true':
             if initializeNetwork():
-                xbmc.executebuiltin('RunPlugin(%s?mode=71,replace)' % sys.argv[0])
+                xbmc.executebuiltin('RunPlugin(%s?mode=71)' % sys.argv[0])
             else:
                 xbmc.executebuiltin('RunPlugin(%s?mode=82)' % sys.argv[0])
         else:
-            xbmc.executebuiltin('RunPlugin(%s?mode=71,replace)' % sys.argv[0])
+            xbmc.executebuiltin('RunPlugin(%s?mode=71)' % sys.argv[0])
 
     elif mode=='71':
         if initializeSession():
-            xbmc.executebuiltin('RunPlugin(%s?mode=72,replace)' % sys.argv[0])
+            xbmc.executebuiltin('RunPlugin(%s?mode=72)' % sys.argv[0])
         else:
             xbmc.executebuiltin('RunPlugin(%s?mode=82)' % sys.argv[0])
 
     elif mode=='72':
         if initializeChannel() and checkSettings():
-            xbmc.executebuiltin('Container.Update(%s)' % sys.argv[0])
+            xbmc.executebuiltin('Container.Update(%s,replace)' % sys.argv[0])
         else:
             xbmc.executebuiltin('RunPlugin(%s?mode=82)' % sys.argv[0])
 
     # update session only
     elif mode=='73':
         if initializeSession() and checkSettings():
-            xbmc.executebuiltin('Container.Update(%s)' % sys.argv[0])
+            xbmc.executebuiltin('Container.Update(%s,replace)' % sys.argv[0])
         else:
             xbmc.executebuiltin('RunPlugin(%s?mode=82)' % sys.argv[0])
 
     # update channel only
     elif mode=='74':
         if initializeChannel() and checkSettings():
-            xbmc.executebuiltin('Container.Update(%s)' % sys.argv[0])
+            xbmc.executebuiltin('Container.Update(%s,replace)' % sys.argv[0])
         else:
             xbmc.executebuiltin('RunPlugin(%s?mode=82)' % sys.argv[0])
 
-    # cache
+    # clear cache
     elif mode=='80':
         Cache().clear()
         Cache().update()
 
-    # settings
+    # open settings
     elif mode=='82':
         # clear smartlist
         SmartList().clear()
@@ -140,6 +140,7 @@ def main():
         # open settings
         xbmc.executebuiltin('Addon.OpenSettings(%s)' % Const.ADDON_ID)
 
+    # open settings as smartlist editor
     elif mode=='83':
         # update cache settings
         Cache().update()
@@ -156,7 +157,5 @@ def main():
         # add to smartlist
         SmartList().set(name, url)
         SmartList().add()
-        # refresh top page
-        xbmc.executebuiltin('Container.Update(%s)' % sys.argv[0])
 
 if __name__  == '__main__': main()

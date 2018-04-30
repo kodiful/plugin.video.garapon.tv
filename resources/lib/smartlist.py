@@ -19,9 +19,12 @@ class SmartList():
 
     def getList(self):
         if os.path.exists(Const.SMARTLIST_FILE):
-            f = codecs.open(Const.SMARTLIST_FILE,'r','utf-8')
-            list = json.loads(f.read())
-            f.close()
+            try:
+                f = codecs.open(Const.SMARTLIST_FILE,'r','utf-8')
+                list = json.loads(f.read())
+                f.close()
+            except:
+                list = []
         else:
             list = []
         return list
