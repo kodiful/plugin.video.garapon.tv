@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 import time
 import codecs
 import json
+import urlparse
 
 from const import Const
 from channel import Channel
