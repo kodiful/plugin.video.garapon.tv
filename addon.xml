@@ -14,10 +14,10 @@
     <platform>all</platform>
     <summary lang="en">Garapon TV Client</summary>
     <summary lang="ja">ガラポンTVクライアント</summary>
-    <description lang="en">Search &amp; Watch Contents of Garapon TV</description>
-    <description lang="ja">ガラポンTVに蓄積されたコンテンツを検索・視聴します</description>
+    <description lang="en">Operates Garapon TV</description>
+    <description lang="ja">ガラポンTVを操作します</description>
     <disclaimer lang="en">Tested on macOS</disclaimer>
-    <disclaimer lang="ja">WindowsとMacOSXで動作</disclaimer>
+    <disclaimer lang="ja">macOSで動作検証しています</disclaimer>
     <website>http://kodiful.com/</website>
   </extension>
 </addon>
