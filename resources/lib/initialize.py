@@ -148,7 +148,7 @@ def remotePlay(url):
     xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path=url))
 
 #-------------------------------------------------------------------------------
-def remoteSyncSession(url):
+def remoteSync(url):
     # パラメータ抽出
     o = urlparse.urlparse(url)
     args = urlparse.parse_qs(o.query)

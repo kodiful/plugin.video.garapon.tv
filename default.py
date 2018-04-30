@@ -150,7 +150,7 @@ def main():
 
     elif mode=='84':
         # sync gtvsession
-        remoteSyncSession(url)
+        remoteSync(url)
 
     elif mode=='85':
         # add to smartlist
