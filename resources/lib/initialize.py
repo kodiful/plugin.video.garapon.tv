@@ -2,6 +2,7 @@
 
 from __future__ import unicode_literals
 
+import sys
 import time
 import codecs
 import json
@@ -135,7 +136,18 @@ def checkSettings():
         return False
 
 #-------------------------------------------------------------------------------
-def syncSession(url):
+def remotePlay(url):
+    # パラメータ抽出
+    o = urlparse.urlparse(url)
+    args = urlparse.parse_qs(o.query)
+    for key in args.keys(): args[key] = args[key][0]
+    # 再生
+    url = Request().content_url(gtvpath=o.path, starttime=args.get('starttime',0))
+    listitem = xbmcgui.ListItem(path=url)
+    xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, listitem)
+
+#-------------------------------------------------------------------------------
+def remoteSyncSession(url):
     # パラメータ抽出
     o = urlparse.urlparse(url)
     args = urlparse.parse_qs(o.query)

@@ -11,7 +11,7 @@ from resources.lib.const      import Const
 from resources.lib.browse     import Browse
 from resources.lib.item       import Cache
 from resources.lib.smartlist  import SmartList
-from resources.lib.initialize import initializeNetwork,initializeSession,initializeChannel,checkSettings,syncSession
+from resources.lib.initialize import *
 
 #-------------------------------------------------------------------------------
 def main():
@@ -33,6 +33,11 @@ def main():
     # 各種処理
     if mode=='':
         Browse().show('top')
+
+    # play
+    elif mode=='10':
+        xbmc.executebuiltin('XBMC.CECActivateSource')
+        remotePlay(url)
 
     # browse
     elif mode=='11':
@@ -145,7 +150,7 @@ def main():
 
     elif mode=='84':
         # sync gtvsession
-        syncSession(url);
+        remoteSyncSession(url)
 
     elif mode=='85':
         # add to smartlist

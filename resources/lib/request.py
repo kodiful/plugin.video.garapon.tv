@@ -71,9 +71,12 @@ class Request():
         url = '%s/thumbs/%s' % (self.server, gtvid)
         return self.__request(url)
 
-    def content_url(self, gtvid):
-        values = {'dev_id':Const.DEV_ID, 'gtvsession':self.settings['session'], 'starttime':0}
-        url = '%s/%s.m3u8?%s' % (self.server, gtvid, urllib.urlencode(values))
+    def content_url(self, gtvid, gtvpath='', starttime=0):
+        values = {'dev_id':Const.DEV_ID, 'gtvsession':self.settings['session'], 'starttime':starttime}
+        if gtvpath:
+            url = '%s/%s?%s' % (self.server, gtvpath, urllib.urlencode(values))
+        else:
+            url = '%s/%s.m3u8?%s' % (self.server, gtvid, urllib.urlencode(values))
         return url
 
     def sync(self, url, credential, gtvsession, authtime, authupdate):
