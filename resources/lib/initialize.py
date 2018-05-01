@@ -141,7 +141,7 @@ def checkSettings():
 def remotePlay(url):
     # パラメータ抽出
     o = urlparse.urlparse(url)
-    args = urlparse.parse_qs(o.query)
+    args = urlparse.parse_qs(o.query, keep_blank_values=True)
     for key in args.keys(): args[key] = args[key][0]
     # 再生
     url = Request().content_url(gtvid=o.path, starttime=args.get('starttime',0))
@@ -151,7 +151,7 @@ def remotePlay(url):
 def remoteSync(url):
     # パラメータ抽出
     o = urlparse.urlparse(url)
-    args = urlparse.parse_qs(o.query)
+    args = urlparse.parse_qs(o.query, keep_blank_values=True)
     for key in args.keys(): args[key] = args[key][0]
     # サーバの設定値
     url = urlparse.urlunparse((o[0],o[1],o[2],'','',''))

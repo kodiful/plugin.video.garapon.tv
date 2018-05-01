@@ -16,7 +16,7 @@ from resources.lib.initialize import *
 #-------------------------------------------------------------------------------
 def main():
     # パラメータ抽出
-    args = urlparse.parse_qs(sys.argv[2][1:])
+    args = urlparse.parse_qs(sys.argv[2][1:], keep_blank_values=True)
     for key in args.keys(): args[key] = args[key][0]
     mode = args.get('mode', '')
     url  = args.get('url',  '') # str

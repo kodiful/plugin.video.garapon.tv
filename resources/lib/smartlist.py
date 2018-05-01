@@ -62,7 +62,7 @@ class SmartList():
         # リセット
         self.clear()
         # ダイアログに設定
-        args = urlparse.parse_qs(query)
+        args = urlparse.parse_qs(query, keep_blank_values=True)
         for key in args.keys(): args[key] = args[key][0]
         # keyword
         Const.SET('keyword', uname)
