@@ -7,6 +7,7 @@ import codecs
 import urllib, urlparse
 import json
 
+from common import *
 from channel import Channel
 from genre import Genre
 from const import Const
@@ -34,7 +35,8 @@ class SmartList():
         list = sorted(list, key=lambda item: item['query'])
         # ファイルに書き込む
         f = codecs.open(Const.SMARTLIST_FILE,'w','utf-8')
-        f.write(json.dumps(list))
+        #f.write(json.dumps(list))
+        f.write(json.dumps(list, sort_keys=True, ensure_ascii=False, indent=2))
         f.close()
 
     def clear(self):
@@ -125,11 +127,11 @@ class SmartList():
                 break
         # データを追加
         data = {}
-        data['title'] = keyword
+        data['title'] = keyword.decode('utf-8')
         data['query'] = query
         data['channel'] = str2
-        data['source'] = source
-        data['keyword'] = keyword
+        data['source'] = source.decode('utf-8')
+        data['keyword'] = keyword.decode('utf-8')
         if genre['id0']: data['genre0'] = str0
         if genre['id1']: data[genre['id']] = str1
         list.append(data)

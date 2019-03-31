@@ -33,7 +33,8 @@ class Channel():
 
     def setData(self, data):
         f = codecs.open(Const.CHANNEL_FILE,'w','utf-8')
-        f.write(json.dumps(data))
+        #f.write(json.dumps(data))
+        f.write(json.dumps(data, sort_keys=True, ensure_ascii=False, indent=2))
         f.close()
 
     def getData(self):
