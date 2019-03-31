@@ -9,7 +9,7 @@ import json
 import urlparse
 import xbmcgui, xbmcplugin
 
-from common import log
+from common import *
 from const import Const
 from channel import Channel
 from genre import Genre
