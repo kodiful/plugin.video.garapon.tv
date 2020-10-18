@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
-
 import os
-import codecs
 import urllib, urlparse
 import json
 
@@ -12,7 +9,7 @@ from channel import Channel
 from genre import Genre
 from const import Const
 
-#-------------------------------------------------------------------------------
+
 class SmartList():
 
     def __init__(self):
@@ -21,9 +18,8 @@ class SmartList():
     def getList(self):
         if os.path.exists(Const.SMARTLIST_FILE):
             try:
-                f = codecs.open(Const.SMARTLIST_FILE,'r','utf-8')
-                list = json.loads(f.read())
-                f.close()
+                with open(Const.SMARTLIST_FILE, 'r') as f:
+                    list = convert(json.loads(f.read()))
             except:
                 list = []
         else:
@@ -34,10 +30,8 @@ class SmartList():
         # queryでソート
         list = sorted(list, key=lambda item: item['query'])
         # ファイルに書き込む
-        f = codecs.open(Const.SMARTLIST_FILE,'w','utf-8')
-        #f.write(json.dumps(list))
-        f.write(json.dumps(list, sort_keys=True, ensure_ascii=False, indent=2))
-        f.close()
+        with open(Const.SMARTLIST_FILE, 'w') as f:
+            f.write(json.dumps(list, sort_keys=True, ensure_ascii=False, indent=2))
 
     def clear(self):
         for id in ['channel',
@@ -100,15 +94,15 @@ class SmartList():
 
     def add(self):
         # ダイアログの設定を取得
-        source = Const.GET('source') # type(source)=str
-        keyword = Const.GET('keyword') # type(keyword)=str
+        source = Const.GET('source')
+        keyword = Const.GET('keyword')
         # channel
-        str2 = Const.GET('channel').decode('utf-8') # type(str2)=unicode
+        str2 = Const.GET('channel')
         channel = Channel().search(str2)
         # genre
-        str0 = Const.GET('genre0').decode('utf-8') # type(str0)=unicode
+        str0 = Const.GET('genre0')
         genre = Genre().search(str0)
-        str1 = Const.GET(genre['id']).decode('utf-8') # type(str1)=unicode
+        str1 = Const.GET(genre['id'])
         genre = Genre().search(str0, str1)
         # query
         query = 'n='+str(Const.ITEMS)+'&p=1&video=all'
@@ -127,11 +121,11 @@ class SmartList():
                 break
         # データを追加
         data = {}
-        data['title'] = keyword.decode('utf-8')
+        data['title'] = keyword
         data['query'] = query
         data['channel'] = str2
-        data['source'] = source.decode('utf-8')
-        data['keyword'] = keyword.decode('utf-8')
+        data['source'] = source
+        data['keyword'] = keyword
         if genre['id0']: data['genre0'] = str0
         if genre['id1']: data[genre['id']] = str1
         list.append(data)

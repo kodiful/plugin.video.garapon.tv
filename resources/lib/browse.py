@@ -1,27 +1,25 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
-
 import sys, os
 import datetime, time
 import re, math
 import urllib, urlparse
 import json
-import codecs
 import threading
 import xbmc,xbmcaddon,xbmcgui,xbmcplugin
 
-from common import log,notify,isholiday
+from common import *
 from channel import Channel
 from genre import Genre
 from smartlist import SmartList
 from request import Request
 from const import Const
 from item import Item
+from downloader import Downloader
 
-from initialize import initializeSession,checkSettings
+from initialize import initializeSession, checkSettings
 
-#-------------------------------------------------------------------------------
+
 class Browse:
 
     def __init__(self, query=None):
@@ -29,43 +27,28 @@ class Browse:
         self.args = urlparse.parse_qs(self.query, keep_blank_values=True)
         for key in self.args.keys(): self.args[key] = self.args[key][0]
 
-    def show(self, action):
-        if action == 'top':
-            self.show_top()
-        elif action == 'date':
-            self.show_date()
-        elif action == 'channel':
-            self.show_channel()
-        elif action == 'genre':
-            self.show_genre()
-        elif action == 'subgenre':
-            self.show_subgenre()
-        # end of directory
-        xbmcplugin.endOfDirectory(int(sys.argv[1]))
-
-    def show_top(self):
+    def top(self):
         #放送中の番組
-        self.add_directory_item(Const.STR(30916),self.query,16,context='top',thumbnail=Const.RETRO_TV)
+        self.add_directory_item(Const.STR(30916),self.query,16,context='top',iconimage=Const.RETRO_TV)
         #検索:日付
-        self.add_directory_item(Const.STR(30933),'',11,context='top',thumbnail=Const.CALENDAR)
+        self.add_directory_item(Const.STR(30933),'',11,context='top',iconimage=Const.CALENDAR)
         #検索:チャンネル
-        self.add_directory_item(Const.STR(30934),'',12,context='top',thumbnail=Const.RADIO_TOWER)
+        self.add_directory_item(Const.STR(30934),'',12,context='top',iconimage=Const.RADIO_TOWER)
         #検索:ジャンル
-        self.add_directory_item(Const.STR(30935),'',13,context='top',thumbnail=Const.CATEGORIZE)
+        self.add_directory_item(Const.STR(30935),'',13,context='top',iconimage=Const.CATEGORIZE)
         #お気に入り
-        self.add_directory_item(Const.STR(30923),self.query+'&rank=all',15,context='top',thumbnail=Const.FAVORITE_FOLDER)
+        self.add_directory_item(Const.STR(30923),self.query+'&rank=all',15,context='top',iconimage=Const.FAVORITE_FOLDER)
         #ダウンロード
-        if Const.PLUS_ADDON:
-            listitem = xbmcgui.ListItem(Const.PLUS_ADDON.getLocalizedString(30927), iconImage=Const.DOWNLOADS_FOLDER, thumbnailImage=Const.DOWNLOADS_FOLDER)
-            url = 'plugin://%s' % Const.PLUS_ADDON_ID
-            xbmcplugin.addDirectoryItem(int(sys.argv[1]), url, listitem, True)
+        Downloader().top(Const.DOWNLOADS_FOLDER)
         #スマートリスト
         for i in SmartList().getList():
             title = i['title']
             query = i['query']
-            self.add_directory_item(title,query,15,context='smartlist',thumbnail=Const.BROWSE_FOLDER)
+            self.add_directory_item(title,query,15,context='smartlist',iconimage=Const.BROWSE_FOLDER)
+        # end of directory
+        xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
-    def show_date(self):
+    def select_date(self):
         #すべての日付
         name = '[COLOR green]%s[/COLOR]' % Const.STR(30912)
         if self.args.get('ch',None) is None:
@@ -74,14 +57,15 @@ class Browse:
             mode = 13
         else:
             mode = 15
-        self.add_directory_item(name,self.query+'&sdate=&edate=',mode,thumbnail=Const.CALENDAR)
+        self.add_directory_item(name,self.query+'&sdate=&edate=',mode,iconimage=Const.CALENDAR)
         #月,火,水,木,金,土,日
-        w = Const.STR(30920).split(',')
+        w = Const.STR(30920).encode('utf-8').split(',')
         for i in range(120):
             d = datetime.date.today() - datetime.timedelta(i)
             wd = d.weekday()
             #月日
-            date1 = d.strftime(Const.STR(30919).encode('utf-8','ignore')).decode('utf-8')  + '(' + w[wd]+ ')'
+            log(type(w[wd]))
+            date1 = d.strftime(Const.STR(30919).encode('utf-8')) + '(' + w[wd]+ ')'
             date2 = d.strftime('%Y-%m-%d')
             if isholiday(date2) or wd == 6:
                 name = '[COLOR red]%s[/COLOR]' % date1
@@ -96,9 +80,11 @@ class Browse:
                 mode = 13
             else:
                 mode = 15
-            self.add_directory_item(name,query,mode,thumbnail=Const.CALENDAR)
+            self.add_directory_item(name,query,mode,iconimage=Const.CALENDAR)
+        # end of directory
+        xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
-    def show_channel(self):
+    def select_channel(self):
         for ch in Channel().getList():
             name = ch['name']
             id = ch['id']
@@ -109,9 +95,11 @@ class Browse:
             else:
                 mode = 15
             query = '%s&%s' % (self.query, urllib.urlencode({'ch':id}))
-            self.add_directory_item(name,query,mode,thumbnail=Const.RADIO_TOWER)
+            self.add_directory_item(name,query,mode,iconimage=Const.RADIO_TOWER)
+        # end of directory
+        xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
-    def show_genre(self):
+    def select_genre(self):
         for i in Genre().getList():
             name = i['name']
             id = i['id']
@@ -123,12 +111,14 @@ class Browse:
                 else:
                     mode = 15
                 query = '%s&%s' % (self.query, urllib.urlencode({'genre0':'','genre1':''}))
-                self.add_directory_item(name,query,mode,thumbnail=Const.CATEGORIZE)
+                self.add_directory_item(name,query,mode,iconimage=Const.CATEGORIZE)
             else:
                 query = '%s&%s' % (self.query, urllib.urlencode({'genre0':id}))
-                self.add_directory_item(name,query,14,thumbnail=Const.CATEGORIZE)
+                self.add_directory_item(name,query,14,iconimage=Const.CATEGORIZE)
+        # end of directory
+        xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
-    def show_subgenre(self):
+    def select_subgenre(self):
         genre0 = re.search('&genre0=([0-9]+)',self.query).group(1)
         for i in Genre().getList(genre0):
             name = i['name']
@@ -140,7 +130,9 @@ class Browse:
             else:
                 mode = 15
             query = '%s&%s' % (self.query, urllib.urlencode({'genre1':id}))
-            self.add_directory_item(name,query,mode,thumbnail=Const.CATEGORIZE)
+            self.add_directory_item(name,query,mode,iconimage=Const.CATEGORIZE)
+        # end of directory
+        xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
     def favorites(self):
         # 検索
@@ -181,7 +173,7 @@ class Browse:
                     self.args['p'] = page+1
                     query = urllib.urlencode(self.args)
                     #次のページへ
-                    self.add_directory_item('[COLOR green]%s[/COLOR]' % (Const.STR(30922)),query,15,thumbnail=Const.RIGHT)
+                    self.add_directory_item('[COLOR green]%s[/COLOR]' % (Const.STR(30922)),query,15,iconimage=Const.RIGHT)
                 # end of directory
                 xbmcplugin.endOfDirectory(int(sys.argv[1]))
             elif retry == True:
@@ -206,32 +198,37 @@ class Browse:
     def add_item(self, item, onair=False):
         # listitem
         item = Item(item, onair)
-        listitem = xbmcgui.ListItem(item.title, iconImage=item.thumbnail, thumbnailImage=item.thumbnail)
-        listitem.setInfo(type='video',
-                         infoLabels={'title':item.title,
-                                     'plot':item.plot,
-                                     'plotoutline':item.outline,
-                                     'studio':item.studio,
-                                     'genre':item.genre,
-                                     'date':item.date,
-                                     'duration':item.duration})
+        s = item.item['_summary']
+        labels = {
+            'title': s['title'],
+            'plot': '%s\n%s' % (s['date'], s['description']),
+            'plotoutline': s['description'],
+            'studio': s['source'],
+            'genre': s['category'],
+            'date': s['date'],
+            'duration': s['duration'],
+        }
+        listitem = xbmcgui.ListItem(item.title())
+        listitem.setArt({'icon':s['thumbnail'], 'thumb':s['thumbnail'], 'poster':s['thumbnail']})
+        listitem.setInfo(type='video', infoLabels=labels)
         listitem.setProperty('IsPlayable', 'true')
         # context menu
         listitem.addContextMenuItems(item.contextmenu, replaceItems=True)
         # add directory item
-        return xbmcplugin.addDirectoryItem(int(sys.argv[1]), item.link, listitem, False)
+        xbmcplugin.addDirectoryItem(int(sys.argv[1]), s['url'], listitem, False)
 
-    def add_directory_item(self, name, url, mode, context='', thumbnail=''):
+    def add_directory_item(self, name, url, mode, context='', iconimage=''):
         # listitem
-        listitem = xbmcgui.ListItem(name, iconImage=thumbnail, thumbnailImage=thumbnail)
+        listitem = xbmcgui.ListItem(name)
+        listitem.setArt({'icon':iconimage})
         # context menu
         contextMenu = []
         if context == 'smartlist':
             # スマートリストを編集
-            action = 'RunPlugin(%s?mode=63&name=%s)' % (sys.argv[0], urllib.quote_plus(name.encode('utf-8','ignore')))
+            action = 'RunPlugin(%s?mode=63&name=%s)' % (sys.argv[0], urllib.quote_plus(name))
             contextMenu.append((Const.STR(30904),action))
             # スマートリストを削除
-            action = 'RunPlugin(%s?mode=64&name=%s)' % (sys.argv[0], urllib.quote_plus(name.encode('utf-8','ignore')))
+            action = 'RunPlugin(%s?mode=64&name=%s)' % (sys.argv[0], urllib.quote_plus(name))
             contextMenu.append((Const.STR(30905),action))
         elif context != 'top':
             # トップに戻る
@@ -244,7 +241,7 @@ class Browse:
         url = '%s?url=%s&mode=%s' % (sys.argv[0], urllib.quote_plus(url), mode)
         xbmcplugin.addDirectoryItem(int(sys.argv[1]), url, listitem, True)
 
-#-------------------------------------------------------------------------------
+
 class UpdateOnAir:
 
     def __init__(self, programs):
@@ -272,9 +269,8 @@ class UpdateOnAir:
             delay = self.next_aired - now + 30
             if delay < 0: delay = 0
             # idを設定
-            f = codecs.open(Const.RESUME_FILE,'w','utf-8')
-            f.write('')
-            f.close()
+            with open(Const.RESUME_FILE, 'w') as f:
+                f.write('')
             id = os.path.getmtime(Const.RESUME_FILE)
             # スレッドを起動
             threading.Timer(delay, self.check_onair, args=[id]).start()

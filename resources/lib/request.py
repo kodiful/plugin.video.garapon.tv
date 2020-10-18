@@ -1,16 +1,14 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
-
 import urllib, urllib2
 import hashlib
 
 from urllib2 import URLError, HTTPError
 
-from common import notify,log
+from common import notify, log
 from const import Const
 
-#-------------------------------------------------------------------------------
+
 class Request():
 
     def __init__(self):
@@ -68,16 +66,15 @@ class Request():
         return self.__request(url, query)
 
     def thumbnail(self, gtvid):
-        url = '%s/thumbs/%s' % (self.server, gtvid)
+        url = self.thumbnail_url(gtvid)
         return self.__request(url)
+
+    def thumbnail_url(self, gtvid):
+        url = '%s/thumbs/%s' % (self.server, gtvid)
+        return url
 
     def content_url(self, gtvid, starttime=0):
         values = {'dev_id':Const.DEV_ID, 'gtvsession':self.settings['session'], 'starttime':starttime}
         if gtvid[-5:] != '.m3u8': gtvid += '.m3u8'
         url = '%s/%s?%s' % (self.server, gtvid, urllib.urlencode(values))
         return url
-
-    def sync(self, url, credential, gtvsession, authtime, authupdate):
-        values = {'credential':credential, 'gtvsession':gtvsession, 'authtime':authtime, 'authupdate':authupdate}
-        url = '%s?%s' % (url, urllib.urlencode(values))
-        return self.__request(url)

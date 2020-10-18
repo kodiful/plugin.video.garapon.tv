@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
-
 import datetime, time
 import re, os, sys
 import urllib
@@ -19,26 +17,36 @@ from genre import Genre
 from const import Const
 from request import Request
 
-#-------------------------------------------------------------------------------
+from common import *
+from downloader import Downloader
+
+
 class Item():
 
     def __init__(self, item, onair=False):
-        # JSONオブジェクトを格納する
-        self.item = item
-        # プロパティを抽出する
-        self.title       = self.get_title(onair)
-        self.duration    = self.get_duration(onair)
-        self.date        = self.get_date()
-        self.outline     = self.get_outline()
-        self.plot        = self.get_plot()
-        self.studio      = self.get_studio()
-        self.genre       = self.get_genre()
-        self.link        = self.get_link()
-        self.thumbnail   = self.get_thumbnail()
+        # オンエアのステータス
+        self.onair = onair
+        # JSONオブジェクトをコピーする
+        self.item = convert(item)
+        # 付加情報で上書きする
+        gtvid = self.item['gtvid']
+        self.item['_summary'] = {
+            'title': self.item['title'],
+            'url': Request().content_url(gtvid),
+            'date': self.item['startdate'],
+            'description': self.item['description'],
+            'source': self.item['bc'],
+            'category': self.genre(),
+            'duration': self.duration(),
+            'thumbnail': Request().thumbnail_url(gtvid),
+            'thumbfile': self.thumbnail(),
+            'contentid': gtvid,
+        }
+        # コンテキストメニュー
         self.contextmenu = self.get_contextmenu()
 
-    def get_title(self, onair=False):
-        if onair:
+    def title(self):
+        if self.onair:
             try:
                 t = datetime.datetime.strptime(self.item['startdate'],'%Y-%m-%d %H:%M:%S')
             except TypeError:
@@ -52,8 +60,13 @@ class Item():
             title = self.item['title']
         return title
 
-    def get_duration(self, onair=False):
-        if onair:
+    def date(self):
+        match = re.search('^([0-9]{4})-([0-9]{2})-([0-9]{2})',self.item['startdate'])
+        date = '%s.%s.%s' % (match.group(3),match.group(2),match.group(1))
+        return date
+
+    def duration(self):
+        if self.onair:
             duration = ''
         else:
             match = re.search('^([0-9]{2,}):([0-9]{2}):([0-9]{2})',self.item['duration'])
@@ -61,39 +74,7 @@ class Item():
             duration = '%d' % (int(match.group(1))*3600+int(match.group(2))*60+int(match.group(2)))
         return duration
 
-    def get_date(self):
-        match = re.search('^([0-9]{4})-([0-9]{2})-([0-9]{2})',self.item['startdate'])
-        date = '%s.%s.%s' % (match.group(3),match.group(2),match.group(1))
-        return date
-
-    def get_outline(self):
-        outline = ''
-        if self.item['description'] is None:
-            return ''
-        else:
-            return ' ' + self.item['description']
-
-    def get_plot(self):
-        plot = self.item['startdate']
-        if not self.item['description'] is None:
-            plot += '\n' + self.item['description']
-        try:
-            hit = self.item['caption_hit']
-            if int(hit) > 0:
-                for i in range(int(hit)):
-                    caption = self.item['caption'][i]
-                    plot += '\n(%s) %s' % (caption['caption_time'],caption['caption_text'])
-        except:
-            pass
-        return plot
-
-    def get_studio(self):
-        if self.item['bc'] is None:
-            return ''
-        else:
-            return self.item['bc']
-
-    def get_genre(self):
+    def genre(self):
         if self.item['genre'] is None:
             return ''
         else:
@@ -107,10 +88,7 @@ class Item():
                     buf.append(genre['name0'])
             return ', '.join(buf)
 
-    def get_link(self):
-        return Request().content_url(gtvid=self.item['gtvid'])
-
-    def get_thumbnail(self):
+    def thumbnail(self):
         imagefile = os.path.join(Const.CACHE_PATH, '%s.png' % self.item['gtvid'])
         if os.path.isfile(imagefile) and os.path.getsize(imagefile) < 1000:
             # delete imagefile
@@ -122,22 +100,23 @@ class Item():
             c.execute("DELETE FROM texture WHERE url = '%s';" % imagefile)
             conn.commit()
             conn.close()
-        if not os.path.isfile(imagefile):
-            buffer = Request().thumbnail(gtvid=self.item['gtvid'])
-            image = Image.open(StringIO(buffer)) #320x180
-            image = image.resize((216, 122))
-            background = Image.new('RGB', (216,216), (0,0,0))
-            background.paste(image, (0,47))
-            background.save(imagefile, 'PNG')
+        buffer = Request().thumbnail(gtvid=self.item['gtvid'])
+        image = Image.open(StringIO(buffer)) #320x180
+        image = image.resize((216, 122))
+        background = Image.new('RGB', (216,216), (0,0,0))
+        background.paste(image, (0,47))
+        background.save(imagefile, 'PNG')
         return imagefile
 
+    # コンテキストメニュー
     def get_contextmenu(self):
-        title = self.item['title'].encode('utf-8','ignore')
+        gtvid = self.item['gtvid']
+        title = self.item['title']
         menu = []
-        # info
+        # 詳細情報
         action = 'Action(Info)'
         menu.append((Const.STR(30906), action))
-        # add smartlist
+        # スマートリストに追加
         try:
             if self.item['genre'][0]:
                 genre = self.item['genre'][0].split('/')
@@ -148,9 +127,9 @@ class Item():
         url1 = 'ch=%s&genre0=%s&genre1=%s' % (self.item['ch'], genre[0], genre[1])
         action = 'RunPlugin(%s?mode=61&name=%s&url=%s)' % (sys.argv[0],urllib.quote_plus(title),urllib.quote_plus(url1))
         menu.append((Const.STR(30903), action))
-        # favorite
-        url2 = 'gtvid=%s&rank=1' % (self.item['gtvid'])
-        url3 = 'gtvid=%s&rank=0' % (self.item['gtvid'])
+        # お気に入りに追加
+        url2 = 'gtvid=%s&rank=1' % (gtvid)
+        url3 = 'gtvid=%s&rank=0' % (gtvid)
         if self.item['favorite'] == '0':
             # add
             action = 'RunPlugin(%s?mode=20&name=%s&url=%s)' % (sys.argv[0],urllib.quote_plus(title),urllib.quote_plus(url2))
@@ -159,42 +138,9 @@ class Item():
             # delete
             action = 'RunPlugin(%s?mode=20&name=%s&url=%s)' % (sys.argv[0],urllib.quote_plus(title),urllib.quote_plus(url3))
             menu.append((Const.STR(30926), action))
-        # download
-        if Const.PLUS_ADDON:
-            url4 = 'gtvid=%s' % (self.item['gtvid'])
-            json = os.path.join(Const.DOWNLOAD_PATH, self.item['gtvid']+'.js')
-            if os.path.isfile(json):
-                # delete
-                action = 'RunPlugin(plugin://%s?action=delete&gtvid=%s)' % (Const.PLUS_ADDON_ID,urllib.quote_plus(self.item['gtvid']))
-                menu.append((Const.PLUS_ADDON.getLocalizedString(30930), action))
-            else:
-                # add
-                action = 'RunPlugin(plugin://%s?action=add&gtvid=%s)' % (Const.PLUS_ADDON_ID,urllib.quote_plus(self.item['gtvid']))
-                menu.append((Const.PLUS_ADDON.getLocalizedString(30929), action))
-        # return to top
-        action = 'Container.Update(plugin://%s,replace)' % Const.ADDON_ID
+        # サウンロードに追加
+        menu += Downloader().contextmenu(self.item, Request().content_url(gtvid))
+        # トップに戻る
+        action = 'Container.Update(%s,replace)' % (sys.argv[0])
         menu.append((Const.STR(30936), action))
         return menu
-
-#-------------------------------------------------------------------------------
-class Cache():
-
-    def __init__(self):
-        self.files = os.listdir(Const.CACHE_PATH)
-
-    def clear(self):
-        for file in self.files:
-            try: os.remove(os.path.join(Const.CACHE_PATH, file))
-            except: pass
-
-    def update(self):
-        size = 0
-        for file in self.files:
-            try: size = size + os.path.getsize(os.path.join(Const.CACHE_PATH, file))
-            except: pass
-        if size > 1024*1024:
-            Const.SET('cache', '%.1f MB / %d files' % (size/1024.0/1024.0,len(self.files)))
-        elif size > 1024:
-            Const.SET('cache', '%.1f kB / %d files' % (size/1024.0,len(self.files)))
-        else:
-            Const.SET('cache', '%d bytes / %d files' % (size,len(self.files)))

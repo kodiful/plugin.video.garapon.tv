@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
-
+import sys
+import os
+import shutil
 import datetime
 import urlparse
 import xbmc, xbmcaddon, xbmcgui, xbmcplugin
@@ -9,48 +10,76 @@ import xbmc, xbmcaddon, xbmcgui, xbmcplugin
 from resources.lib.common     import log
 from resources.lib.const      import Const
 from resources.lib.browse     import Browse
-from resources.lib.item       import Cache
 from resources.lib.smartlist  import SmartList
 from resources.lib.initialize import *
 
-#-------------------------------------------------------------------------------
-def main():
+# HTTP接続におけるタイムアウト(秒)
+import socket
+socket.setdefaulttimeout(60)
+
+
+class Cache():
+
+    def __init__(self):
+        self.files = os.listdir(Const.CACHE_PATH)
+
+    def clear(self):
+        for file in self.files:
+            try: os.remove(os.path.join(Const.CACHE_PATH, file))
+            except: pass
+
+    def update(self):
+        size = 0
+        for file in self.files:
+            try: size = size + os.path.getsize(os.path.join(Const.CACHE_PATH, file))
+            except: pass
+        if size > 1024*1024:
+            Const.SET('cache', '%.1f MB / %d files' % (size/1024.0/1024.0,len(self.files)))
+        elif size > 1024:
+            Const.SET('cache', '%.1f kB / %d files' % (size/1024.0,len(self.files)))
+        else:
+            Const.SET('cache', '%d bytes / %d files' % (size,len(self.files)))
+
+
+if __name__  == '__main__':
+
     # パラメータ抽出
     args = urlparse.parse_qs(sys.argv[2][1:], keep_blank_values=True)
     for key in args.keys(): args[key] = args[key][0]
+
     mode = args.get('mode', '')
-    url  = args.get('url',  '') # str
-    name = args.get('name', '').decode('utf-8') # unicode
-    # ログ
-    log([mode,url,name])
-    # 必須項目が設定されていない場合はダイアログを開く
-    if mode == '' and checkSettings() is False:
-        xbmc.executebuiltin('RunPlugin(%s?mode=82)' % sys.argv[0])
-        return
+    url  = args.get('url',  '')
+    name = args.get('name', '')
+
+    # settings.xmlがない場合はテンプレートをコピーする
+    if not os.path.isfile(Const.SETTINGS_FILE):
+        shutil.copyfile(Const.TEMPLATE_FILE, Const.SETTINGS_FILE)
+
     # キャッシュサイズが未設定の場合は設定
-    if Const.GET('cache') == '': Cache().update()
+    if Const.GET('cache') == '':
+        Cache().update()
 
     # 各種処理
     if mode=='':
-        Browse().show('top')
+        # 必須設定をチェック
+        if checkSettings():
+            # 設定済であればトップ画面を開く
+            Browse().top()
+        else:
+            # 未設定の場合はダイアログを開く
+            xbmc.executebuiltin('Addon.OpenSettings(%s)' % Const.ADDON_ID)
 
-    # play
-    elif mode=='10':
-        xbmc.executebuiltin('XBMC.CECActivateSource')
-        remotePlay(url)
-
-    # browse
     elif mode=='11':
-        Browse(url).show('date')
+        Browse(url).select_date()
 
     elif mode=='12':
-        Browse(url).show('channel')
+        Browse(url).select_channel()
 
     elif mode=='13':
-        Browse(url).show('genre')
+        Browse(url).select_genre()
 
     elif mode=='14':
-        Browse(url).show('subgenre')
+        Browse(url).select_subgenre()
 
     # search
     elif mode=='15':
@@ -149,13 +178,7 @@ def main():
         xbmc.executebuiltin('SetFocus(102)') # smartlist category which is the 3rd
         xbmc.executebuiltin('SetFocus(215)') # keyword control which is the 16th including hidden controls
 
-    elif mode=='84':
-        # sync gtvsession
-        remoteSync(url)
-
     elif mode=='85':
         # add to smartlist
         SmartList().set(name, url)
         SmartList().add()
-
-if __name__  == '__main__': main()

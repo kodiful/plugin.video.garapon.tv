@@ -20,7 +20,6 @@
   <category label="30200">
     <setting label="30201" id="cache" type="action" option="close" action="RunPlugin(plugin://$ID/?mode=80)" default=""/>
     <setting label="30109" id="garapon_session" type="action" option="close" action="RunPlugin(plugin://$ID/?mode=73)" default=""/>
-    <setting label="30109" id="garapon_authtime" type="text" default="0" visible="false"/>
     <setting label="30110" id="garapon_ch" type="action" option="close" action="RunPlugin(plugin://$ID/?mode=74)" default=""/>
     <setting label="30204" id="debug" type="bool" default="false"/>
   </category>

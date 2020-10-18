@@ -1,21 +1,18 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
-
 import os
-import codecs
 import json
 
+from common import *
 from const import Const
 
-#-------------------------------------------------------------------------------
+
 class Channel():
 
     def __init__(self):
         if os.path.isfile(Const.CHANNEL_FILE):
-            f = codecs.open(Const.CHANNEL_FILE,'r','utf-8')
-            self.data = json.loads(f.read())
-            f.close()
+            with open(Const.CHANNEL_FILE, 'r') as f:
+                self.data = convert(json.loads(f.read()))
 
     def search(self, key):
         result = {'id':'', 'name':'', 'hash':''}
@@ -32,16 +29,14 @@ class Channel():
         return result
 
     def setData(self, data):
-        f = codecs.open(Const.CHANNEL_FILE,'w','utf-8')
-        #f.write(json.dumps(data))
-        f.write(json.dumps(data, sort_keys=True, ensure_ascii=False, indent=2))
-        f.close()
+        with open(Const.CHANNEL_FILE, 'w') as f:
+            f.write(json.dumps(data, sort_keys=True, ensure_ascii=False, indent=2))
 
     def getData(self):
         return self.data
 
     def getList(self):
-        data = [{'id':'', 'name':'[COLOR green]%s[/COLOR]' % (Const.STR(30913))}] #すべてのチャンネル
+        data = [{'id':'', 'name':'[COLOR green]%s[/COLOR]' % (Const.STR(30913).encode('utf-8'))}] #すべてのチャンネル
         for key, value in self.data['ch_list'].iteritems():
             data.append({'id':key, 'name':value['ch_name']})
         return sorted(data, key=lambda item: item['id'])

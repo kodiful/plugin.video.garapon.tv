@@ -1,21 +1,18 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
-
 import os
-import codecs
 import json
 
+from common import *
 from const import Const
 
-#-------------------------------------------------------------------------------
+
 class Genre():
 
     def __init__(self):
         if os.path.isfile(Const.GENRE_FILE):
-            f = codecs.open(Const.GENRE_FILE,'r','utf-8')
-            self.data = json.loads(f.read())
-            f.close()
+            with open(Const.GENRE_FILE, 'r') as f:
+                self.data = convert(json.loads(f.read()))
 
     def search(self, key0, key1=''):
         result = {'id':'','id0':'','name0':'','id1':'','name1':''}

@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
-
 import os
 import xbmc, xbmcaddon
 
@@ -21,18 +19,9 @@ class Const:
     GET = ADDON.getSetting
     SET = ADDON.setSetting
 
-    # ガラポンTVクライアント機能拡張
-    PLUS_ADDON_ID = 'plugin.video.garapon.tv.plus'
-    try:
-        PLUS_ADDON = xbmcaddon.Addon(PLUS_ADDON_ID)
-        DOWNLOAD_PATH = PLUS_ADDON.getSetting('download_path')
-    except:
-        PLUS_ADDON = None
-        DOWNLOAD_PATH = None
-
     # ディレクトリパス
-    PROFILE_PATH = xbmc.translatePath(ADDON.getAddonInfo('profile').decode('utf-8'))
-    PLUGIN_PATH = xbmc.translatePath(ADDON.getAddonInfo('path').decode('utf-8'))
+    PROFILE_PATH = xbmc.translatePath(ADDON.getAddonInfo('profile'))
+    PLUGIN_PATH = xbmc.translatePath(ADDON.getAddonInfo('path'))
     RESOURCES_PATH = os.path.join(PLUGIN_PATH, 'resources')
     DATA_PATH = os.path.join(RESOURCES_PATH, 'data')
     IMAGE_PATH = os.path.join(DATA_PATH, 'image')

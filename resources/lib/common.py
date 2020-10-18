@@ -1,15 +1,22 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
-
-import socket
 import os
 import inspect
 import xbmc
 import xbmcaddon
 
-# HTTP接続におけるタイムアウト(秒)
-socket.setdefaulttimeout(60)
+def convert(obj):
+    if isinstance(obj, dict):
+        obj1 = {}
+        for key, val in obj.items():
+            obj1[key.encode('utf-8')] = convert(val)
+        return obj1
+    elif isinstance(obj, list):
+        return map(lambda x: convert(x), obj)
+    elif isinstance(obj, unicode):
+        return obj.encode('utf-8')
+    else:
+        return obj
 
 def notify(message, **options):
     addon = xbmcaddon.Addon()
@@ -27,7 +34,7 @@ def log(*messages, **options):
     addon = xbmcaddon.Addon()
     if options.get('error', False):
         level = xbmc.LOGERROR
-    elif addon.getSetting('debug') == 'true':
+    elif 1:#addon.getSetting('debug') == 'true':
         level = xbmc.LOGNOTICE
     else:
         level = None
@@ -165,11 +172,11 @@ def isholiday(day):
         "2020-05-04":True, # みどりの日
         "2020-05-05":True, # こどもの日
         "2020-05-06":True, # 振替休日
-        "2020-07-20":True, # 海の日
-        "2020-08-11":True, # 山の日
+        "2020-07-23":True, # 海の日
+        "2020-07-24":True, # スポーツの日
+        "2020-08-10":True, # 山の日
         "2020-09-21":True, # 敬老の日
         "2020-09-22":True, # 秋分の日
-        "2020-10-12":True, # 体育の日
         "2020-11-03":True, # 文化の日
         "2020-11-23":True, # 勤労感謝の日
         "2021-01-01":True, # 元日
