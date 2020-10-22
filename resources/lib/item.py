@@ -100,12 +100,15 @@ class Item():
             c.execute("DELETE FROM texture WHERE url = '%s';" % imagefile)
             conn.commit()
             conn.close()
-        buffer = Request().thumbnail(gtvid=self.item['gtvid'])
-        image = Image.open(StringIO(buffer)) #320x180
-        image = image.resize((216, 122))
-        background = Image.new('RGB', (216,216), (0,0,0))
-        background.paste(image, (0,47))
-        background.save(imagefile, 'PNG')
+        if os.path.isfile(imagefile):
+            pass
+        else:
+            buffer = Request().thumbnail(gtvid=self.item['gtvid'])
+            image = Image.open(StringIO(buffer)) #320x180
+            image = image.resize((216, 122))
+            background = Image.new('RGB', (216,216), (0,0,0))
+            background.paste(image, (0,47))
+            background.save(imagefile, 'PNG')
         return imagefile
 
     # コンテキストメニュー
