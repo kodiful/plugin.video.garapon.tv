@@ -43,7 +43,7 @@ def initializeNetwork():
             notify('Network initialized successfully')
             return True
         else:
-            log('getgtvaddress failed', error=True)
+            log('getgtvaddress failed', response_body, error=True)
             notify('Network initialization failed')
             return False
     else:
@@ -65,11 +65,11 @@ def initializeSession():
                 notify('Session initialized successfully')
                 return True
             else:
-                log('auth failed', error=True)
+                log('auth failed', response_body, error=True)
                 notify('Session initialization failed')
                 return False
         else:
-            log('auth failed', error=True)
+            log('auth failed', response_body, error=True)
             notify('Session initialization failed')
             return False
     else:
@@ -116,7 +116,7 @@ def initializeChannel():
             notify('Channel initialized successfully')
             return True
         else:
-            log('channel failed', error=True)
+            log('channel failed', response_body, error=True)
             notify('Channel initialization failed')
             return False
     else:
