@@ -55,7 +55,7 @@ class Item():
             s = time.strptime(self.item['duration'],'%H:%M:%S')
             s = t + datetime.timedelta(hours=s.tm_hour, minutes=s.tm_min, seconds=s.tm_sec)
             edate = s.strftime('%H:%M')
-            title = '[COLOR green]%s\u25b6[/COLOR] %s (%s〜%s)' % (self.item['bc'],self.item['title'],sdate,edate)
+            title = '[COLOR green]%s\xe2\x96\xb6[/COLOR] %s (%s〜%s)' % (self.item['bc'],self.item['title'],sdate,edate)
         else:
             title = self.item['title']
         return title
