@@ -159,13 +159,13 @@ class Browse:
                 if onair:
                     # 放送中の番組はチャンネル順
                     for item in sorted(programs, key=lambda item: item['ch']):
-                        if item['ts'] == 1: self.add_item(item, onair)
+                        if item.get('ts') == 1: self.add_item(item, onair)
                     # 放送中の番組の更新を設定
                     UpdateOnAir(programs).set_timer()
                 else:
                     # 放送済みの番組は時間降順
                     for item in sorted(programs, key=lambda item: item['startdate'], reverse=True):
-                        if item['ts'] == 1: self.add_item(item, onair)
+                        if item.get('ts') == 1: self.add_item(item, onair)
                 # 検索結果の続きがある場合は次のページへのリンクを表示
                 hit = int(response_data['hit'])
                 page = int(self.args.get('p'))
