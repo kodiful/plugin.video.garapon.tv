@@ -205,7 +205,7 @@ class Browse:
             'plotoutline': s['description'],
             'studio': s['source'],
             'genre': s['category'],
-            'date': s['date'],
+            'dateadded': s['date'],
             'duration': s['duration'],
         }
         listitem = xbmcgui.ListItem(item.title())
