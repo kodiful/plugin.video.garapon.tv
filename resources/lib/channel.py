@@ -36,7 +36,7 @@ class Channel():
         return self.data
 
     def getList(self):
-        data = [{'id':'', 'name':'[COLOR green]%s[/COLOR]' % (Const.STR(30913).encode('utf-8'))}] #すべてのチャンネル
+        data = [{'id':'', 'name':'[COLOR lightgreen]%s[/COLOR]' % (Const.STR(30913).encode('utf-8'))}] #すべてのチャンネル
         for key, value in self.data['ch_list'].iteritems():
             data.append({'id':key, 'name':value['ch_name']})
         return sorted(data, key=lambda item: item['id'])

@@ -1,11 +1,11 @@
 [
   {
-    "genre0":{"value":"", "name":"[COLOR green]すべてのジャンル[/COLOR]"}
+    "genre0":{"value":"", "name":"[COLOR lightgreen]すべてのジャンル[/COLOR]"}
   },
   {
     "id":"genre00",
     "genre0":{"value":"0", "name":"ニュース/報道"},
-    "genre1":[{"value":"", "name":"[COLOR green]すべてのサブジャンル(ニュース/報道)[/COLOR]"},
+    "genre1":[{"value":"", "name":"[COLOR lightgreen]すべてのサブジャンル(ニュース/報道)[/COLOR]"},
     {"value":"0", "name":"定時/総合"},
     {"value":"1", "name":"天気"},
     {"value":"2", "name":"特集/ドキュメント"},
@@ -22,7 +22,7 @@
   {
     "id":"genre01",
     "genre0":{"value":"1", "name":"スポーツ"},
-    "genre1":[{"value":"", "name":"[COLOR green]すべてのサブジャンル(スポーツ)[/COLOR]"},
+    "genre1":[{"value":"", "name":"[COLOR lightgreen]すべてのサブジャンル(スポーツ)[/COLOR]"},
     {"value":"0", "name":"スポーツニュース"},
     {"value":"1", "name":"野球"},
     {"value":"2", "name":"サッカー"},
@@ -39,7 +39,7 @@
   {
     "id":"genre02",
     "genre0":{"value":"2", "name":"情報/ワイドショー"},
-    "genre1":[{"value":"", "name":"[COLOR green]すべてのサブジャンル(情報/ワイドショー)[/COLOR]"},
+    "genre1":[{"value":"", "name":"[COLOR lightgreen]すべてのサブジャンル(情報/ワイドショー)[/COLOR]"},
     {"value":"0", "name":"芸能/ワイドショー"},
     {"value":"1", "name":"ファッション"},
     {"value":"2", "name":"暮らし/住まい"},
@@ -53,7 +53,7 @@
   {
     "id":"genre03",
     "genre0":{"value":"3", "name":"ドラマ"},
-    "genre1":[{"value":"", "name":"[COLOR green]すべてのサブジャンル(ドラマ)[/COLOR]"},
+    "genre1":[{"value":"", "name":"[COLOR lightgreen]すべてのサブジャンル(ドラマ)[/COLOR]"},
     {"value":"0", "name":"国内ドラマ"},
     {"value":"1", "name":"海外ドラマ"},
     {"value":"2", "name":"時代劇"},
@@ -62,7 +62,7 @@
   {
     "id":"genre04",
     "genre0":{"value":"4", "name":"音楽"},
-    "genre1":[{"value":"", "name":"[COLOR green]すべてのサブジャンル(音楽)[/COLOR]"},
+    "genre1":[{"value":"", "name":"[COLOR lightgreen]すべてのサブジャンル(音楽)[/COLOR]"},
     {"value":"0", "name":"国内ロック/ポップス"},
     {"value":"1", "name":"海外ロック/ポップス"},
     {"value":"2", "name":"クラシック/オペラ"},
@@ -79,7 +79,7 @@
   {
     "id":"genre05",
     "genre0":{"value":"5", "name":"バラエティー"},
-    "genre1":[{"value":"", "name":"[COLOR green]すべてのサブジャンル(バラエティー)[/COLOR]"},
+    "genre1":[{"value":"", "name":"[COLOR lightgreen]すべてのサブジャンル(バラエティー)[/COLOR]"},
     {"value":"0", "name":"クイズ"},
     {"value":"1", "name":"ゲーム"},
     {"value":"2", "name":"トークバラエティ"},
@@ -92,7 +92,7 @@
   {
     "id":"genre06",
     "genre0":{"value":"6", "name":"映画"},
-    "genre1":[{"value":"", "name":"[COLOR green]すべてのサブジャンル(映画)[/COLOR]"},
+    "genre1":[{"value":"", "name":"[COLOR lightgreen]すべてのサブジャンル(映画)[/COLOR]"},
     {"value":"0", "name":"洋画"},
     {"value":"1", "name":"邦画"},
     {"value":"2", "name":"アニメ"},
@@ -101,7 +101,7 @@
   {
     "id":"genre07",
     "genre0":{"value":"7", "name":"アニメ/特撮"},
-    "genre1":[{"value":"", "name":"[COLOR green]すべてのサブジャンル(アニメ/特撮)[/COLOR]"},
+    "genre1":[{"value":"", "name":"[COLOR lightgreen]すべてのサブジャンル(アニメ/特撮)[/COLOR]"},
     {"value":"0", "name":"国内アニメ"},
     {"value":"1", "name":"海外アニメ"},
     {"value":"2", "name":"特撮"},
@@ -110,7 +110,7 @@
   {
     "id":"genre08",
     "genre0":{"value":"8", "name":"ドキュメンタリー/教養"},
-    "genre1":[{"value":"", "name":"[COLOR green]すべてのサブジャンル(ドキュメンタリー/教養)[/COLOR]"},
+    "genre1":[{"value":"", "name":"[COLOR lightgreen]すべてのサブジャンル(ドキュメンタリー/教養)[/COLOR]"},
     {"value":"0", "name":"社会/時事"},
     {"value":"1", "name":"歴史/紀行"},
     {"value":"2", "name":"自然/動物/環境"},
@@ -125,7 +125,7 @@
   {
     "id":"genre09",
     "genre0":{"value":"9", "name":"劇場/公演"},
-    "genre1":[{"value":"", "name":"[COLOR green]すべてのサブジャンル(劇場/公演)[/COLOR]"},
+    "genre1":[{"value":"", "name":"[COLOR lightgreen]すべてのサブジャンル(劇場/公演)[/COLOR]"},
     {"value":"0", "name":"現代劇/新劇"},
     {"value":"1", "name":"ミュージカル"},
     {"value":"2", "name":"ダンス/バレエ"},
@@ -136,7 +136,7 @@
   {
     "id":"genre10",
     "genre0":{"value":"10", "name":"趣味/教育"},
-    "genre1":[{"value":"", "name":"[COLOR green]すべてのサブジャンル(趣味/教育)[/COLOR]"},
+    "genre1":[{"value":"", "name":"[COLOR lightgreen]すべてのサブジャンル(趣味/教育)[/COLOR]"},
     {"value":"0", "name":"旅/釣り/アウトドア"},
     {"value":"1", "name":"園芸/ペット/手芸"},
     {"value":"2", "name":"音楽/美術/工芸"},
@@ -155,7 +155,7 @@
   {
     "id":"genre11",
     "genre0":{"value":"11", "name":"福祉"},
-    "genre1":[{"value":"", "name":"[COLOR green]すべてのサブジャンル(福祉)[/COLOR]"},
+    "genre1":[{"value":"", "name":"[COLOR lightgreen]すべてのサブジャンル(福祉)[/COLOR]"},
     {"value":"0", "name":"高齢者"},
     {"value":"1", "name":"障害者"},
     {"value":"2", "name":"社会福祉"},

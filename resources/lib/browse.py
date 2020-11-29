@@ -50,7 +50,7 @@ class Browse:
 
     def select_date(self):
         #すべての日付
-        name = '[COLOR green]%s[/COLOR]' % Const.STR(30912)
+        name = '[COLOR lightgreen]%s[/COLOR]' % Const.STR(30912)
         if self.args.get('ch',None) is None:
             mode = 12
         elif self.args.get('genre0',None) is None:
@@ -173,7 +173,7 @@ class Browse:
                     self.args['p'] = page+1
                     query = urllib.urlencode(self.args)
                     #次のページへ
-                    self.add_directory_item('[COLOR green]%s[/COLOR]' % (Const.STR(30922)),query,15,iconimage=Const.RIGHT)
+                    self.add_directory_item('[COLOR lightgreen]%s[/COLOR]' % (Const.STR(30922)),query,15,iconimage=Const.RIGHT)
                 # end of directory
                 xbmcplugin.endOfDirectory(int(sys.argv[1]))
             elif retry == True:

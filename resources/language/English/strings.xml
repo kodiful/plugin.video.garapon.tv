@@ -14,8 +14,8 @@
   <string id="30901">EPG</string>
   <string id="30902">Caption</string>
   <string id="30005">Keyword</string>
-  <string id="30006">[COLOR green]Add Smartlist[/COLOR]</string>
-  <string id="30007">[COLOR green]Change Smartlist[/COLOR]</string>
+  <string id="30006">[COLOR lightgreen]Add Smartlist[/COLOR]</string>
+  <string id="30007">[COLOR lightgreen]Change Smartlist[/COLOR]</string>
   <string id="30100">Garapon TV Settings</string>
   <string id="30101">Garapon ID</string>
   <string id="30102">Password</string>
@@ -23,12 +23,12 @@
   <string id="30104">IP Address</string>
   <string id="30105">HTTP Port(default:80)</string>
   <string id="30106">HTTPS Port(default:443)</string>
-  <string id="30107">[COLOR green]Update Settings[/COLOR]</string>
+  <string id="30107">[COLOR lightgreen]Update Settings[/COLOR]</string>
   <string id="30108">Session ID</string>
-  <string id="30109">[COLOR green]Update Session ID[/COLOR]</string>
-  <string id="30110">[COLOR green]Update Channel List[/COLOR]</string>
+  <string id="30109">[COLOR lightgreen]Update Session ID[/COLOR]</string>
+  <string id="30110">[COLOR lightgreen]Update Channel List[/COLOR]</string>
   <string id="30200">Other Settings</string>
-  <string id="30201">[COLOR green]Clear Thumbnails Cache[/COLOR]</string>
+  <string id="30201">[COLOR lightgreen]Clear Thumbnails Cache[/COLOR]</string>
   <string id="30202">Thumbnails</string>
   <string id="30203">Streaming</string>
   <string id="30204">Debug</string>
@@ -52,14 +52,14 @@
   <string id="30920">Mon,Tue,Wed,Thu,Fri,Sat,Sun</string>
   <string id="30921">Show page {page} out of {totalpages} pages ({hit}programs)</string>
   <string id="30922">Next page</string>
-  <string id="30923">[COLOR green]Favorites[/COLOR]</string>
+  <string id="30923">[COLOR lightgreen]Favorites[/COLOR]</string>
   <string id="30924">Show favorites</string>
   <string id="30925">Add to favorites</string>
   <string id="30926">Remove from favorites</string>
   <string id="30932">Show radio programs on air</string>
-  <string id="30933">[COLOR green]Search:Date[/COLOR]</string>
-  <string id="30934">[COLOR green]Search:Channel[/COLOR]</string>
-  <string id="30935">[COLOR green]Search:Genre[/COLOR]</string>
+  <string id="30933">[COLOR lightgreen]Search:Date[/COLOR]</string>
+  <string id="30934">[COLOR lightgreen]Search:Channel[/COLOR]</string>
+  <string id="30935">[COLOR lightgreen]Search:Genre[/COLOR]</string>
   <string id="30936">Return to top</string>
   <string id="30937">Addon settings</string>
 </strings>
