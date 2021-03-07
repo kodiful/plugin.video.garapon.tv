@@ -1,21 +1,15 @@
 # -*- coding: utf-8 -*-
 
-import os
-import json
-
-from common import *
-from const import Const
+from resources.lib.common import Common
 
 
 class Genre():
 
     def __init__(self):
-        if os.path.isfile(Const.GENRE_FILE):
-            with open(Const.GENRE_FILE, 'r') as f:
-                self.data = convert(json.loads(f.read()))
+        self.data = Common.read_json(Common.GENRE_FILE)
 
     def search(self, key0, key1=''):
-        result = {'id':'','id0':'','name0':'','id1':'','name1':''}
+        result = {'id': '', 'id0': '', 'name0': '', 'id1': '', 'name1': ''}
         # 大分類リスト
         genre0_list = self.data
         for genre0 in genre0_list:
@@ -44,7 +38,7 @@ class Genre():
                                 result['name1'] = name1
                                 break
                     break
-            except:
+            except Exception:
                 pass
         return result
 
@@ -57,14 +51,14 @@ class Genre():
         if id is None:
             for genre0 in genre0_list:
                 g0 = genre0['genre0']
-                data.append({'id':g0['value'],'name':g0['name']})
+                data.append({'id': g0['value'], 'name': g0['name']})
         else:
             for genre0 in genre0_list:
                 g0 = genre0['genre0']
                 if id == g0['value']:
                     genre1_list = genre0['genre1']
                     for g1 in genre1_list:
-                        data.append({'id':g1['value'],'name':g1['name']})
+                        data.append({'id': g1['value'], 'name': g1['name']})
         return data
 
     def getLabel(self):
@@ -85,6 +79,6 @@ class Genre():
                 for g1 in genre1_list:
                     list.append(g1['name'])
                 data[id] = '|'.join(list)
-            except:
+            except Exception:
                 pass
         return data

@@ -1,22 +1,18 @@
 # -*- coding: utf-8 -*-
 
-import sys
-import time
 import json
-import urlparse
-import xbmcgui, xbmcplugin
 
-from common import *
-from const import Const
-from channel import Channel
-from genre import Genre
-from request import Request
+from resources.lib.common import Common
+from resources.lib.channel import Channel
+from resources.lib.genre import Genre
+from resources.lib.request import Request
+
 
 def initializeNetwork():
     # リセット
-    Const.SET('garapon_addr', '')
-    Const.SET('garapon_http', '')
-    Const.SET('garapon_https', '')
+    Common.SET('garapon_addr', '')
+    Common.SET('garapon_http', '')
+    Common.SET('garapon_https', '')
     # データ取得
     response_body = Request().getgtvaddress()
     if response_body:
@@ -30,30 +26,31 @@ def initializeNetwork():
                     params['message'] = value
                 else:
                     params[key] = value
-            except:
+            except Exception:
                 pass
         if params['message'] == 'success':
-            Const.SET('garapon_addr', params['ipaddr'])
+            Common.SET('garapon_addr', params['ipaddr'])
             if params['ipaddr'] == params['gipaddr']:
-                Const.SET('garapon_http', params['port'])
-                Const.SET('garapon_https', params['port2'])
+                Common.SET('garapon_http', params['port'])
+                Common.SET('garapon_https', params['port2'])
             else:
-                Const.SET('garapon_http', '')
-                Const.SET('garapon_https', '')
-            notify('Network initialized successfully')
+                Common.SET('garapon_http', '')
+                Common.SET('garapon_https', '')
+            Common.notify('Network initialized successfully')
             return True
         else:
-            log('getgtvaddress failed', response_body, error=True)
-            notify('Network initialization failed')
+            Common.log('getgtvaddress failed', response_body, error=True)
+            Common.notify('Network initialization failed')
             return False
     else:
-        log('empty response', error=True)
-        notify('Network initialization failed')
+        Common.log('empty response', error=True)
+        Common.notify('Network initialization failed')
         return False
+
 
 def initializeSession():
     # リセット
-    Const.SET('garapon_session', '')
+    Common.SET('garapon_session', '')
     # データ取得
     response_body = Request().auth()
     if response_body:
@@ -61,39 +58,39 @@ def initializeSession():
         if response_data['status'] == 1:
             if response_data['login'] == 1:
                 gtvsession = response_data['gtvsession']
-                Const.SET('garapon_session', gtvsession)
-                notify('Session initialized successfully')
+                Common.SET('garapon_session', gtvsession)
+                Common.notify('Session initialized successfully')
                 return True
             else:
-                log('auth failed', response_body, error=True)
-                notify('Session initialization failed')
+                Common.log('auth failed', response_body, error=True)
+                Common.notify('Session initialization failed')
                 return False
         else:
-            log('auth failed', response_body, error=True)
-            notify('Session initialization failed')
+            Common.log('auth failed', response_body, error=True)
+            Common.notify('Session initialization failed')
             return False
     else:
-        log('empty response', error=True)
-        notify('Session initialization failed')
+        Common.log('empty response', error=True)
+        Common.notify('Session initialization failed')
         return False
+
 
 def initializeChannel():
     # リセット
-    Const.SET('garapon_ch', '')
+    Common.SET('garapon_ch', '')
     # データ取得
     response_body = Request().channel()
     if response_body:
-        response_data = convert(json.loads(response_body))
+        response_data = json.loads(response_body)
         if response_data['status'] == 1:
             # ファイルに書き出す
             Channel().setData(response_data)
             # チャンネル数を設定
-            Const.SET('garapon_ch', '%d channels' % len(response_data['ch_list'].keys()))
+            Common.SET('garapon_ch', '%d channels' % len(response_data['ch_list'].keys()))
             # テンプレートからsettings.xmlを生成
-            data = Genre().getLabel() # genre
-            data['channel'] = Channel().getLabel() # channel
-            with open(Const.TEMPLATE_FILE,'r') as f:
-                template = f.read()
+            data = Genre().getLabel()  # genre
+            data['channel'] = Channel().getLabel()  # channel
+            template = Common.read_file(Common.TEMPLATE_FILE)
             source = template.format(
                 channel=data['channel'],
                 genre0=data['genre0'],
@@ -110,23 +107,20 @@ def initializeChannel():
                 genre10=data['genre10'],
                 genre11=data['genre11'],
             )
-            with open(Const.SETTINGS_FILE,'w') as f:
-                f.write(source)
+            Common.write_file(Common.SETTINGS_FILE, source)
             # 完了
-            notify('Channel initialized successfully')
+            Common.notify('Channel initialized successfully')
             return True
         else:
-            log('channel failed', response_body, error=True)
-            notify('Channel initialization failed')
+            Common.log('channel failed', response_body, error=True)
+            Common.notify('Channel initialization failed')
             return False
     else:
-        log('empty response', error=True)
-        notify('Channel initialization failed')
+        Common.log('empty response', error=True)
+        Common.notify('Channel initialization failed')
         return False
+
 
 def checkSettings():
     # 必須設定項目をチェック
-    if Const.GET('garapon_id') and Const.GET('garapon_pw') and Const.GET('garapon_addr') and Const.GET('garapon_session'):
-        return True
-    else:
-        return False
+    return Common.GET('garapon_id') and Common.GET('garapon_pw') and Common.GET('garapon_addr') and Common.GET('garapon_session')

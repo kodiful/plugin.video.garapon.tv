@@ -1,21 +1,15 @@
 # -*- coding: utf-8 -*-
 
-import os
-import json
-
-from common import *
-from const import Const
+from resources.lib.common import Common
 
 
 class Channel():
 
     def __init__(self):
-        if os.path.isfile(Const.CHANNEL_FILE):
-            with open(Const.CHANNEL_FILE, 'r') as f:
-                self.data = convert(json.loads(f.read()))
+        self.data = Common.read_json(Common.CHANNEL_FILE)
 
     def search(self, key):
-        result = {'id':'', 'name':'', 'hash':''}
+        result = {'id': '', 'name': '', 'hash': ''}
         list = self.data['ch_list']
         for ch_id in list:
             ch_data = list[ch_id]
@@ -29,16 +23,15 @@ class Channel():
         return result
 
     def setData(self, data):
-        with open(Const.CHANNEL_FILE, 'w') as f:
-            f.write(json.dumps(data, sort_keys=True, ensure_ascii=False, indent=2))
+        Common.write_json(Common.CHANNEL_FILE, data)
 
     def getData(self):
         return self.data
 
     def getList(self):
-        data = [{'id':'', 'name':'[COLOR lightgreen]%s[/COLOR]' % (Const.STR(30913).encode('utf-8'))}] #すべてのチャンネル
-        for key, value in self.data['ch_list'].iteritems():
-            data.append({'id':key, 'name':value['ch_name']})
+        data = [{'id': '', 'name': '[COLOR lightgreen]%s[/COLOR]' % Common.STR(30913)}]  # すべてのチャンネル
+        for key, value in self.data['ch_list'].items():
+            data.append({'id': key, 'name': value['ch_name']})
         return sorted(data, key=lambda item: item['id'])
 
     def getLabel(self):

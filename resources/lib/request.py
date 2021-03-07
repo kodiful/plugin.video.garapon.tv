@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 
-import urllib, urllib2
 import hashlib
 
-from urllib2 import URLError, HTTPError
+import urllib.request
+import urllib.error
 
-from common import notify, log
-from const import Const
+from urllib.parse import urlencode
+
+from resources.lib.common import Common
 
 
 class Request():
@@ -14,26 +15,32 @@ class Request():
     def __init__(self):
         # 設定をコピー
         self.settings = {}
-        for key in ('id','pw','auto','addr','http','https','session'):
-            self.settings[key] = Const.GET('garapon_%s' % key)
+        for key in ('id', 'pw', 'auto', 'addr', 'http', 'https', 'session'):
+            self.settings[key] = Common.GET('garapon_%s' % key)
         # サーバアドレス
         self.server = 'http://%s' % self.settings['addr']
-        if self.settings['http']: self.server = '%s:%s' % (self.server, self.settings['http'])
+        if self.settings['http']:
+            self.server = '%s:%s' % (self.server, self.settings['http'])
 
     def __request(self, url, data=None):
-        if data:
-            req = urllib2.Request(url, data)
-        else:
-            req = url
         try:
-            response = urllib2.urlopen(req)
-        except HTTPError, e:
-            log('HTTPError: %s' % str(e.code), error=True)
-            notify('Request failed')
+            if data:
+                if isinstance(data, bytes):
+                    pass
+                elif isinstance(data, str):
+                    data = data.encode(encoding='utf-8', errors='ignore')
+                else:
+                    raise TypeError
+                response = urllib.request.urlopen(urllib.request.Request(url, data))
+            else:
+                response = urllib.request.urlopen(url)
+        except urllib.error.HTTPError as e:
+            Common.log('HTTPError: %s' % str(e.code), error=True)
+            Common.notify('Request failed')
             return
-        except URLError, e:
-            log('URLError: %s' % str(e.reason), error=True)
-            notify('Request failed')
+        except urllib.error.URLError as e:
+            Common.log('URLError: %s' % str(e.reason), error=True)
+            Common.notify('Request failed')
             return
         response_body = response.read()
         response.close()
@@ -41,29 +48,29 @@ class Request():
 
     def getgtvaddress(self):
         url = 'http://garagw.garapon.info/getgtvaddress'
-        values = {'dev_id':Const.DEV_ID, 'user':self.settings['id'], 'md5passwd':hashlib.md5(self.settings['pw']).hexdigest()}
-        return self.__request(url, urllib.urlencode(values))
+        args = {'dev_id': Common.DEV_ID, 'user': self.settings['id'], 'md5passwd': hashlib.md5(self.settings['pw'].encode()).hexdigest()}
+        return self.__request(url, urlencode(args)).decode(encoding='utf-8', errors='ignore')
 
     def auth(self):
-        values = {'dev_id':Const.DEV_ID}
-        url = '%s/gapi/v3/auth?%s' % (self.server, urllib.urlencode(values))
-        values = {'type':'login', 'loginid':self.settings['id'], 'password':self.settings['pw']}
-        return self.__request(url, urllib.urlencode(values))
+        args = {'dev_id': Common.DEV_ID}
+        url = '%s/gapi/v3/auth?%s' % (self.server, urlencode(args))
+        args = {'type': 'login', 'loginid': self.settings['id'], 'password': self.settings['pw']}
+        return self.__request(url, urlencode(args)).decode(encoding='utf-8', errors='ignore')
 
     def channel(self):
-        values = {'dev_id':Const.DEV_ID, 'gtvsession':self.settings['session']}
-        url = '%s/gapi/v3/channel?%s' % (self.server, urllib.urlencode(values))
-        return self.__request(url)
+        args = {'dev_id': Common.DEV_ID, 'gtvsession': self.settings['session']}
+        url = '%s/gapi/v3/channel?%s' % (self.server, urlencode(args))
+        return self.__request(url).decode(encoding='utf-8', errors='ignore')
 
     def search(self, query):
-        values = {'dev_id':Const.DEV_ID, 'gtvsession':self.settings['session']}
-        url = '%s/gapi/v3/search?%s' % (self.server, urllib.urlencode(values))
-        return self.__request(url, query)
+        args = {'dev_id': Common.DEV_ID, 'gtvsession': self.settings['session']}
+        url = '%s/gapi/v3/search?%s' % (self.server, urlencode(args))
+        return self.__request(url, query).decode(encoding='utf-8', errors='ignore')
 
     def favorites(self, query):
-        values = {'dev_id':Const.DEV_ID, 'gtvsession':self.settings['session']}
-        url = '%s/gapi/v3/favorite?%s' % (self.server, urllib.urlencode(values))
-        return self.__request(url, query)
+        args = {'dev_id': Common.DEV_ID, 'gtvsession': self.settings['session']}
+        url = '%s/gapi/v3/favorite?%s' % (self.server, urlencode(args))
+        return self.__request(url, query).decode(encoding='utf-8', errors='ignore')
 
     def thumbnail(self, gtvid):
         url = self.thumbnail_url(gtvid)
@@ -74,7 +81,8 @@ class Request():
         return url
 
     def content_url(self, gtvid, starttime=0):
-        values = {'dev_id':Const.DEV_ID, 'gtvsession':self.settings['session'], 'starttime':starttime}
-        if gtvid[-5:] != '.m3u8': gtvid += '.m3u8'
-        url = '%s/%s?%s' % (self.server, gtvid, urllib.urlencode(values))
+        args = {'dev_id': Common.DEV_ID, 'gtvsession': self.settings['session'], 'starttime': starttime}
+        if gtvid[-5:] != '.m3u8':
+            gtvid += '.m3u8'
+        url = '%s/%s?%s' % (self.server, gtvid, urlencode(args))
         return url
