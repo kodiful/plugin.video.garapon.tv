@@ -65,25 +65,10 @@ if __name__ == '__main__':
         # settings.xmlがない場合はテンプレートをコピーする
         shutil.copyfile(Common.TEMPLATE_FILE, Common.SETTINGS_FILE)
     else:
-        for id in ['channel',
-                   'genre0',
-                   'genre00',
-                   'genre01',
-                   'genre02',
-                   'genre03',
-                   'genre04',
-                   'genre05',
-                   'genre06',
-                   'genre07',
-                   'genre08',
-                   'genre09',
-                   'genre10',
-                   'genre11',
-                   'keyword',
-                   'query',
-                   'source']:
+        for id in ['channel', 'g0', 'g00', 'g01', 'g02', 'g03', 'g04', 'g05', 'g06', 'g07', 'g08', 'g09', 'g10', 'g11', 'source', 'keyword', 'query']:
+            # settingsへアドオン設定の値をコピー
             settings[id] = Common.GET(id)
-            # コピーした後にリセット
+            # コピーした後にアドオン設定をリセット
             Common.SET(id, '0' if id == 'source' else '')
 
     # キャッシュサイズが未設定の場合は設定
@@ -128,9 +113,9 @@ if __name__ == '__main__':
     elif mode == 'beginEditSmartList':
         name = args.get('name')
         ch = args.get('ch', '')
-        genre0 = args.get('genre0', '')
-        genre1 = args.get('genre1', '')
-        SmartList(settings).beginEdit(name, ch, genre0, genre1)
+        g0 = args.get('g0', '')
+        g1 = args.get('g1', '')
+        SmartList(settings).beginEdit(name, ch, g0, g1)
         # update cache settings
         Cache().update()
         # open settings & focus smartlist category

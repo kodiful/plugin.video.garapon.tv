@@ -9,76 +9,41 @@ class Genre():
         self.data = Common.read_json(Common.GENRE_FILE)
 
     def search(self, key0, key1=''):
+        # 結果を格納するオブジェクト
         result = {'id': '', 'id0': '', 'name0': '', 'id1': '', 'name1': ''}
-        # 大分類リスト
-        genre0_list = self.data
-        for genre0 in genre0_list:
-            try:
-                result['id'] = genre0['id']
-                g0 = genre0['genre0']
-                # 大分類の番号
-                id0 = g0['value']
-                # 大分類の記述
-                name0 = g0['name']
-                # 配下の中分類リスト
-                genre1_list = genre0['genre1']
-                # 大分類の番号もしくは記述が一致
-                if key0 == id0 or key0 == name0:
-                    result['id0'] = id0
-                    result['name0'] = name0
-                    if key1:
-                        for g1 in genre1_list:
-                            # 中分類の番号
-                            id1 = g1['value']
-                            # 中分類の記述
-                            name1 = g1['name']
-                            # 中分類の番号もしくは記述が一致
-                            if key1 == id1 or key1 == name1:
-                                result['id1'] = id1
-                                result['name1'] = name1
-                                break
-                    break
-            except Exception:
-                pass
+        # 大分類を検索
+        for genre0 in filter(lambda x: x.get('id') and key0 in {x['g0']['value'], x['g0']['name']}, self.data):
+            result['id'] = genre0['id']
+            result['id0'] = genre0['g0']['value']
+            result['name0'] = genre0['g0']['name']
+            # key1が指定されていたら
+            if key1:
+                # 中分類も検索
+                for genre1 in filter(lambda x: key1 in {x['value'], x['name']}, genre0['g1']):
+                    result['id1'] = genre1['value']
+                    result['name1'] = genre1['name']
         return result
-
-    def getData(self):
-        return self.data
 
     def getList(self, id=None):
         data = []
-        genre0_list = self.data
         if id is None:
-            for genre0 in genre0_list:
-                g0 = genre0['genre0']
-                data.append({'id': g0['value'], 'name': g0['name']})
+            # idの指定がない場合は大分類のリスト
+            for genre0 in self.data:
+                data.append({'id': genre0['g0']['value'], 'name': genre0['g0']['name']})
         else:
-            for genre0 in genre0_list:
-                g0 = genre0['genre0']
-                if id == g0['value']:
-                    genre1_list = genre0['genre1']
-                    for g1 in genre1_list:
-                        data.append({'id': g1['value'], 'name': g1['name']})
+            # idで指定された大分類配下の中分類のリスト
+            for genre0 in filter(lambda x: id == x['g0']['value'], self.data):
+                for genre1 in genre0['g1']:
+                    data.append({'id': genre1['value'], 'name': genre1['name']})
         return data
 
     def getLabel(self):
         data = {}
-        # genre0
-        list = []
-        genre0_list = self.data
-        for genre0 in genre0_list:
-            g0 = genre0['genre0']
-            list.append(g0['name'])
-        data['genre0'] = '|'.join(list)
-        # genre1
-        for genre0 in genre0_list:
-            try:
-                id = genre0['id']
-                list = []
-                genre1_list = genre0['genre1']
-                for g1 in genre1_list:
-                    list.append(g1['name'])
-                data[id] = '|'.join(list)
-            except Exception:
-                pass
+        # 大分類のリスト
+        data['g0'] = '|'.join(map(lambda x: x['g0']['name'], self.data))
+        # 中分類のリスト
+        for genre0 in self.data:
+            id = genre0.get('id')
+            if id:
+                data[id] = '|'.join(map(lambda x: x['name'], genre0['g1']))
         return data

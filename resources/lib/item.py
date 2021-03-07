@@ -122,7 +122,7 @@ class Item():
                 genre = ['', '']
         except Exception:
             genre = ['', '']
-        args = {'mode': 'beginEditSmartList', 'name': title, 'ch': self.item['ch'], 'genre0': genre[0], 'genre1': genre[1]}
+        args = {'mode': 'beginEditSmartList', 'name': title, 'ch': self.item['ch'], 'g0': genre[0], 'g1': genre[1]}
         menu.append((Common.STR(30903), 'RunPlugin(%s?%s)' % (sys.argv[0], urlencode(args))))
         # お気に入りに追加
         if self.item['favorite'] == '0':

@@ -18,7 +18,7 @@ class SmartList():
     def setList(self, data):
         Common.write_json(Common.SMARTLIST_FILE, sorted(data, key=lambda item: item['query']))
 
-    def beginEdit(self, name, ch, genre0, genre1):
+    def beginEdit(self, name, ch, g0, g1):
         if ch:
             # keyword
             Common.SET('keyword', name)
@@ -26,8 +26,8 @@ class SmartList():
             channel = Channel().search(ch)
             Common.SET('channel', channel['name'])
             # genre
-            genre = Genre().search(genre0, genre1)
-            Common.SET('genre0', genre['name0'])
+            genre = Genre().search(g0, g1)
+            Common.SET('g0', genre['name0'])
             Common.SET(genre['id'], genre['name1'])
         else:
             # スマートリストでtitleが一致するものをダイアログに設定
@@ -47,7 +47,7 @@ class SmartList():
         str2 = self.settings.get('channel')
         channel = Channel().search(str2)
         # genre
-        str0 = self.settings.get('genre0')
+        str0 = self.settings.get('g0')
         genre = Genre().search(str0)
         str1 = self.settings.get(genre['id'])
         genre = Genre().search(str0, str1)
@@ -59,8 +59,8 @@ class SmartList():
             'key': keyword,
             's': ['e', 'c'][int(source)],
             'ch': channel['id'],
-            'genre0': genre['id0'],
-            'genre1': genre['id1']
+            'g0': genre['id0'],
+            'g1': genre['id1']
         }
         # データを追加
         data = {
@@ -71,7 +71,7 @@ class SmartList():
             'keyword': keyword
         }
         if genre['id0']:
-            data['genre0'] = str0
+            data['g0'] = str0
         if genre['id1']:
             data[genre['id']] = str1
         smartlist.append(data)

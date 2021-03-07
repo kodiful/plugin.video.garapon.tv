@@ -84,7 +84,7 @@ def initializeChannel():
         response_data = json.loads(response_body)
         if response_data['status'] == 1:
             # ファイルに書き出す
-            Channel().setData(response_data)
+            Channel().save(response_data)
             # チャンネル数を設定
             Common.SET('garapon_ch', '%d channels' % len(response_data['ch_list'].keys()))
             # テンプレートからsettings.xmlを生成
@@ -93,19 +93,19 @@ def initializeChannel():
             template = Common.read_file(Common.TEMPLATE_FILE)
             source = template.format(
                 channel=data['channel'],
-                genre0=data['genre0'],
-                genre00=data['genre00'],
-                genre01=data['genre01'],
-                genre02=data['genre02'],
-                genre03=data['genre03'],
-                genre04=data['genre04'],
-                genre05=data['genre05'],
-                genre06=data['genre06'],
-                genre07=data['genre07'],
-                genre08=data['genre08'],
-                genre09=data['genre09'],
-                genre10=data['genre10'],
-                genre11=data['genre11'],
+                g0=data['g0'],
+                g00=data['g00'],
+                g01=data['g01'],
+                g02=data['g02'],
+                g03=data['g03'],
+                g04=data['g04'],
+                g05=data['g05'],
+                g06=data['g06'],
+                g07=data['g07'],
+                g08=data['g08'],
+                g09=data['g09'],
+                g10=data['g10'],
+                g11=data['g11'],
             )
             Common.write_file(Common.SETTINGS_FILE, source)
             # 完了
