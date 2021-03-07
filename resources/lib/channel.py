@@ -8,9 +8,6 @@ class Channel():
     def __init__(self):
         self.data = Common.read_json(Common.CHANNEL_FILE)
 
-    def save(self, data):
-        Common.write_json(Common.CHANNEL_FILE, data)
-
     def search(self, key):
         result = {'id': '', 'name': '', 'hash': ''}
         for key, val in filter(lambda x: key in {x[0], x[1]['ch_name'], x[1]['hash_tag']}, self.data['ch_list'].items()):

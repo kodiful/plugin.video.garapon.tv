@@ -78,35 +78,37 @@ def initializeSession():
 def initializeChannel():
     # リセット
     Common.SET('garapon_ch', '')
-    # データ取得
+    # チャンネル情報を取得
     response_body = Request().channel()
     if response_body:
         response_data = json.loads(response_body)
         if response_data['status'] == 1:
-            # ファイルに書き出す
-            Channel().save(response_data)
+            # チャンネル情報をファイルに書き出す
+            Common.write_json(Common.CHANNEL_FILE, response_data)
             # チャンネル数を設定
             Common.SET('garapon_ch', '%d channels' % len(response_data['ch_list'].keys()))
-            # テンプレートからsettings.xmlを生成
-            data = Genre().getLabel()  # genre
-            data['channel'] = Channel().getLabel()  # channel
+            # 設定画面のテンプレートを読み込む
             template = Common.read_file(Common.TEMPLATE_FILE)
+            # テンプレートに書き出すジャンル情報
+            genre = Genre().getLabel()
+            # チャンネル情報とあわせてテンプレートに適用
             source = template.format(
-                channel=data['channel'],
-                g0=data['g0'],
-                g00=data['g00'],
-                g01=data['g01'],
-                g02=data['g02'],
-                g03=data['g03'],
-                g04=data['g04'],
-                g05=data['g05'],
-                g06=data['g06'],
-                g07=data['g07'],
-                g08=data['g08'],
-                g09=data['g09'],
-                g10=data['g10'],
-                g11=data['g11'],
+                channel=Channel().getLabel(),
+                g0=genre['g0'],
+                g00=genre['g00'],
+                g01=genre['g01'],
+                g02=genre['g02'],
+                g03=genre['g03'],
+                g04=genre['g04'],
+                g05=genre['g05'],
+                g06=genre['g06'],
+                g07=genre['g07'],
+                g08=genre['g08'],
+                g09=genre['g09'],
+                g10=genre['g10'],
+                g11=genre['g11'],
             )
+            # 設定画面をファイルに書き出す
             Common.write_file(Common.SETTINGS_FILE, source)
             # 完了
             Common.notify('Channel initialized successfully')
