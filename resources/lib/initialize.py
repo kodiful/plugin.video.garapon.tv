@@ -106,7 +106,7 @@ def initializeChannel():
                 g08=genre['g08'],
                 g09=genre['g09'],
                 g10=genre['g10'],
-                g11=genre['g11'],
+                g11=genre['g11']
             )
             # 設定画面をファイルに書き出す
             Common.write_file(Common.SETTINGS_FILE, source)

@@ -1,10 +1,29 @@
 [
   {
-    "g0": {"value": "", "name": "[COLOR lightgreen]すべてのジャンル[/COLOR]"}
+    "id": "g0",
+    "value": "",
+    "name": "[COLOR lightgreen]すべてのジャンル[/COLOR]",
+    "g1": [
+      {"value": "", "name": "[COLOR lightgreen]すべてのジャンル[/COLOR]"},
+      {"value": "0", "name": "ニュース/報道"},
+      {"value": "1", "name": "スポーツ"},
+      {"value": "2", "name": "情報/ワイドショー"},
+      {"value": "3", "name": "ドラマ"},
+      {"value": "4", "name": "音楽"},
+      {"value": "5", "name": "バラエティー"},
+      {"value": "6", "name": "映画"},
+      {"value": "7", "name": "アニメ/特撮"},
+      {"value": "8", "name": "ドキュメンタリー/教養"},
+      {"value": "9", "name": "劇場/公演"},
+      {"value": "10", "name": "趣味/教育"},
+      {"value": "11", "name": "福祉"},
+      {"value": "15", "name": "その他のジャンル"}
+    ]
   },
   {
     "id": "g00",
-    "g0": {"value": "0", "name": "ニュース/報道"},
+    "value": "0",
+    "name": "ニュース/報道",
     "g1": [
       {"value": "", "name": "[COLOR lightgreen]すべてのサブジャンル(ニュース/報道)[/COLOR]"},
       {"value": "0", "name": "定時/総合"},
@@ -23,7 +42,8 @@
   },
   {
     "id": "g01",
-    "g0": {"value": "1", "name": "スポーツ"},
+    "value": "1",
+    "name": "スポーツ",
     "g1": [
       {"value": "", "name": "[COLOR lightgreen]すべてのサブジャンル(スポーツ)[/COLOR]"},
       {"value": "0", "name": "スポーツニュース"},
@@ -42,7 +62,8 @@
   },
   {
     "id": "g02",
-    "g0": {"value": "2", "name": "情報/ワイドショー"},
+    "value": "2",
+    "name": "情報/ワイドショー",
     "g1": [
       {"value": "", "name": "[COLOR lightgreen]すべてのサブジャンル(情報/ワイドショー)[/COLOR]"},
       {"value": "0", "name": "芸能/ワイドショー"},
@@ -58,7 +79,8 @@
   },
   {
     "id": "g03",
-    "g0": {"value": "3", "name": "ドラマ"},
+    "value": "3",
+    "name": "ドラマ",
     "g1": [
       {"value": "", "name": "[COLOR lightgreen]すべてのサブジャンル(ドラマ)[/COLOR]"},
       {"value": "0", "name": "国内ドラマ"},
@@ -69,7 +91,8 @@
   },
   {
     "id": "g04",
-    "g0": {"value": "4", "name": "音楽"},
+    "value": "4",
+    "name": "音楽",
     "g1": [
       {"value": "", "name": "[COLOR lightgreen]すべてのサブジャンル(音楽)[/COLOR]"},
       {"value": "0", "name": "国内ロック/ポップス"},
@@ -88,7 +111,8 @@
   },
   {
     "id": "g05",
-    "g0": {"value": "5", "name": "バラエティー"},
+    "value": "5",
+    "name": "バラエティー",
     "g1": [
       {"value": "", "name": "[COLOR lightgreen]すべてのサブジャンル(バラエティー)[/COLOR]"},
       {"value": "0", "name": "クイズ"},
@@ -103,7 +127,8 @@
   },
   {
     "id": "g06",
-    "g0": {"value": "6", "name": "映画"},
+    "value": "6",
+    "name": "映画",
     "g1": [
       {"value": "", "name": "[COLOR lightgreen]すべてのサブジャンル(映画)[/COLOR]"},
       {"value": "0", "name": "洋画"},
@@ -114,7 +139,8 @@
   },
   {
     "id": "g07",
-    "g0": {"value": "7", "name": "アニメ/特撮"},
+    "value": "7",
+    "name": "アニメ/特撮",
     "g1": [
       {"value": "", "name": "[COLOR lightgreen]すべてのサブジャンル(アニメ/特撮)[/COLOR]"},
       {"value": "0", "name": "国内アニメ"},
@@ -125,7 +151,8 @@
   },
   {
     "id": "g08",
-    "g0": {"value": "8", "name": "ドキュメンタリー/教養"},
+    "value": "8",
+    "name": "ドキュメンタリー/教養",
     "g1": [
       {"value": "", "name": "[COLOR lightgreen]すべてのサブジャンル(ドキュメンタリー/教養)[/COLOR]"},
       {"value": "0", "name": "社会/時事"},
@@ -142,7 +169,8 @@
   },
   {
     "id": "g09",
-    "g0": {"value": "9", "name": "劇場/公演"},
+    "value": "9",
+    "name": "劇場/公演",
     "g1": [
       {"value": "", "name": "[COLOR lightgreen]すべてのサブジャンル(劇場/公演)[/COLOR]"},
       {"value": "0", "name": "現代劇/新劇"},
@@ -155,7 +183,8 @@
   },
   {
     "id": "g10",
-    "g0": {"value": "10", "name": "趣味/教育"},
+    "value": "10",
+    "name": "趣味/教育",
     "g1": [
       {"value": "", "name": "[COLOR lightgreen]すべてのサブジャンル(趣味/教育)[/COLOR]"},
       {"value": "0", "name": "旅/釣り/アウトドア"},
@@ -176,7 +205,8 @@
   },
   {
     "id": "g11",
-    "g0": {"value": "11", "name": "福祉"},
+    "value": "11",
+    "name": "福祉",
     "g1": [
       {"value": "", "name": "[COLOR lightgreen]すべてのサブジャンル(福祉)[/COLOR]"},
       {"value": "0", "name": "高齢者"},
@@ -190,6 +220,9 @@
     ]
   },
   {
-    "g0": {"value": "15", "name": "その他のジャンル"}
+    "id": "g12",
+    "value": "15",
+    "name": "その他のジャンル",
+    "g1": []
   }
 ]

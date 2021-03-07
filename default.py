@@ -11,6 +11,8 @@ import xbmc
 
 from resources.lib.common import Common
 from resources.lib.browse import Browse
+from resources.lib.channel import Channel
+from resources.lib.genre import Genre
 from resources.lib.smartlist import SmartList
 from resources.lib.initialize import initializeNetwork
 from resources.lib.initialize import initializeSession
@@ -65,11 +67,18 @@ if __name__ == '__main__':
         # settings.xmlがない場合はテンプレートをコピーする
         shutil.copyfile(Common.TEMPLATE_FILE, Common.SETTINGS_FILE)
     else:
-        for id in ['channel', 'g0', 'g00', 'g01', 'g02', 'g03', 'g04', 'g05', 'g06', 'g07', 'g08', 'g09', 'g10', 'g11', 'source', 'keyword', 'query']:
-            # settingsへアドオン設定の値をコピー
+        for id in ['keyword', 'query']:
             settings[id] = Common.GET(id)
-            # コピーした後にアドオン設定をリセット
-            Common.SET(id, '0' if id == 'source' else '')
+            Common.SET(id, '')
+        for id in ['source']:
+            settings[id] = Common.GET(id)
+            Common.SET(id, '0')
+        for id in ['channel']:
+            settings[id] = Common.GET(id)
+            Common.SET(id, Channel().getDefault())
+        for id in ['g0', 'g00', 'g01', 'g02', 'g03', 'g04', 'g05', 'g06', 'g07', 'g08', 'g09', 'g10', 'g11']:
+            settings[id] = Common.GET(id)
+            Common.SET(id, Genre().getDefault(id))
 
     # キャッシュサイズが未設定の場合は設定
     if Common.GET('cache') == '':

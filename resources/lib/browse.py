@@ -4,7 +4,6 @@ import sys
 import os
 import datetime
 import time
-import re
 import json
 import threading
 
@@ -126,10 +125,10 @@ class Browse:
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
     def select_subgenre(self):
-        g0 = re.search('&genre0=([0-9]+)', self.query).group(1)
-        for i in Genre().getList(g0):
-            name = i['name']
-            id = i['id']
+        g0 = self.args['genre0']
+        for genre1 in Genre().getList(g0):
+            id = genre1['id']
+            name = genre1['name']
             if self.args.get('ch') is None:
                 mode = 'selectChannel'
             elif self.args.get('sdate') is None:

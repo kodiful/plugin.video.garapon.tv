@@ -33,7 +33,6 @@ class SmartList():
             # スマートリストでtitleが一致するものをダイアログに設定
             for item in filter(lambda x: x['title'] == name, self.getList()):
                 for key, val in item.items():
-                    Common.log(key, val)
                     Common.SET(key, val)
 
     def endEdit(self):
@@ -47,7 +46,7 @@ class SmartList():
         str2 = self.settings.get('channel')
         channel = Channel().search(str2)
         # genre
-        str0 = self.settings.get('g0')
+        str0 = self.settings.get('g00')
         genre = Genre().search(str0)
         str1 = self.settings.get(genre['id'])
         genre = Genre().search(str0, str1)
