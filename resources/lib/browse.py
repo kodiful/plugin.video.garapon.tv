@@ -71,7 +71,8 @@ class Browse:
             d = datetime.date.today() - datetime.timedelta(i)
             wd = d.weekday()
             # 月日
-            date1 = '%s(%s)' % (d.strftime(Common.STR(30919)), w[wd])
+            # date1 = '%s(%s)' % (d.strftime(Common.STR(30919)), w[wd])
+            date1 = '%s(%s)' % (Common.strftime(d, Common.STR(30919)), w[wd])
             date2 = d.strftime('%Y-%m-%d')
             if Common.isholiday(date2) or wd == 6:
                 name = '[COLOR red]%s[/COLOR]' % date1

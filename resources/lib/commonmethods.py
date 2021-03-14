@@ -149,6 +149,7 @@ class Common:
             ), level)
 
     # 祝祭日判定
+    @staticmethod
     def isholiday(day):
         return day in {
             '2014-01-01',
@@ -564,3 +565,9 @@ class Common:
             '2036-11-23',  # 勤労感謝の日
             '2036-11-24',  # 振替休日
         }
+
+    # workaround for encode problems for strftime on Windows
+    # cf. https://ja.stackoverflow.com/questions/44597/windows上のpythonのdatetime-strftimeで日本語を使うとエラーになる
+    @staticmethod
+    def strftime(d, format):
+        return d.strftime(format.encode('unicode-escape').decode()).encode().decode('unicode-escape')
