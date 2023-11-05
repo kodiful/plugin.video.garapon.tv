@@ -36,7 +36,7 @@ class Browse:
 
     def top(self):
         # 放送中の番組
-        self.add_directory_item(Common.STR(30916), self.query, 16, context='top', iconimage=Common.RETRO_TV)
+        self.add_directory_item(Common.STR(30916), self.query, 'searchOnAir', context='top', iconimage=Common.RETRO_TV)
         # 検索:日付
         self.add_directory_item(Common.STR(30933), '', 'selectDate', context='top', iconimage=Common.CALENDAR)
         # 検索:チャンネル
