@@ -60,7 +60,7 @@ class Browse:
         name = '[COLOR lightgreen]%s[/COLOR]' % Common.STR(30912)
         if self.args.get('ch') is None:
             mode = 'selectChannel'
-        elif self.args.get('g0') is None:
+        elif self.args.get('genre0') is None:
             mode = 'selectGenre'
         else:
             mode = 'search'
@@ -83,7 +83,7 @@ class Browse:
             query = '%s&sdate=%s 00:00:00&edate=%s 23:59:59' % (self.query, date2, date2)
             if self.args.get('ch') is None:
                 mode = 'selectChannel'
-            elif self.args.get('g0') is None:
+            elif self.args.get('genre0') is None:
                 mode = 'selectGenre'
             else:
                 mode = 'search'
@@ -95,7 +95,7 @@ class Browse:
         for ch in Channel().getList():
             name = ch['name']
             id = ch['id']
-            if self.args.get('g0') is None:
+            if self.args.get('genre0') is None:
                 mode = 'selectGenre'
             elif self.args.get('sdate') is None:
                 mode = 'selectDate'
@@ -126,8 +126,8 @@ class Browse:
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
     def select_subgenre(self):
-        g0 = self.args['genre0']
-        for genre1 in Genre().getList(g0):
+        genre0 = self.args['genre0']
+        for genre1 in Genre().getList(genre0):
             id = genre1['id']
             name = genre1['name']
             if self.args.get('ch') is None:
