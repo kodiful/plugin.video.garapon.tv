@@ -24,7 +24,7 @@
     <setting label="30204" id="debug" type="bool" default="false"/>
   </category>
   <category label="30000">
-    <setting label="30001" id="channel" type="labelenum" values="[COLOR lightgreen]すべてのチャンネル[/COLOR]|ｔｖｋ|ＮＨＫ総合 東京|ＮＨＫＥテレ 東京|日テレ|ＴＢＳ|フジテレビ|テレビ朝日|テレビ東京"/>
+    <setting label="30001" id="channel" type="labelenum" values="[COLOR lightgreen]すべてのチャンネル[/COLOR]|ＮＨＫ総合 東京|ＮＨＫＥテレ 東京|日テレ|ＴＢＳ|フジテレビ|テレビ朝日|テレビ東京"/>
     <setting label="30002" id="g0" type="labelenum" values="[COLOR lightgreen]すべてのジャンル[/COLOR]|ニュース/報道|スポーツ|情報/ワイドショー|ドラマ|音楽|バラエティー|映画|アニメ/特撮|ドキュメンタリー/教養|劇場/公演|趣味/教育|福祉|その他のジャンル"/>
     <setting label="30003" id="g00" type="labelenum" values="[COLOR lightgreen]すべてのサブジャンル(ニュース/報道)[/COLOR]|定時/総合|天気|特集/ドキュメント|政治/国会|経済/市況|海外/国際|解説|討論/会談|報道特番|ローカル/地域|交通|その他のサブジャンル(ニュース/報道)" visible="eq(-1,1)"/>
     <setting label="30003" id="g01" type="labelenum" values="[COLOR lightgreen]すべてのサブジャンル(スポーツ)[/COLOR]|スポーツニュース|野球|サッカー|ゴルフ|その他の球技|相撲/格闘技|オリンピック/国際大会|マラソン/陸上/水泳|モータースポーツ|マリン/ウィンタースポーツ|競馬/公営競技|その他のサブジャンル(スポーツ)" visible="eq(-2,2)"/>

@@ -19,7 +19,7 @@ class Request():
             self.settings[key] = Common.GET('garapon_%s' % key)
         # サーバアドレス
         self.server = 'http://%s' % self.settings['addr']
-        if self.settings['http']:
+        if self.settings['http'] != '0':
             self.server = '%s:%s' % (self.server, self.settings['http'])
 
     def __request(self, url, data=None):

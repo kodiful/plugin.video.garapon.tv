@@ -11,8 +11,8 @@ from resources.lib.request import Request
 def initializeNetwork():
     # リセット
     Common.SET('garapon_addr', '')
-    Common.SET('garapon_http', '')
-    Common.SET('garapon_https', '')
+    Common.SET('garapon_http', '0')
+    Common.SET('garapon_https', '0')
     # データ取得
     response_body = Request().getgtvaddress()
     if response_body:
@@ -33,9 +33,6 @@ def initializeNetwork():
             if params['ipaddr'] == params['gipaddr']:
                 Common.SET('garapon_http', params['port'])
                 Common.SET('garapon_https', params['port2'])
-            else:
-                Common.SET('garapon_http', '')
-                Common.SET('garapon_https', '')
             Common.notify('Network initialized successfully')
             return True
         else:
