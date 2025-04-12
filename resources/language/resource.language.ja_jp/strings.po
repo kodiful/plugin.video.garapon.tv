@@ -108,10 +108,6 @@ msgctxt "#30203"
 msgid "Streaming"
 msgstr "ストリーミング"
 
-msgctxt "#30204"
-msgid "Debug"
-msgstr "デバッグ"
-
 msgctxt "#30901"
 msgid "EPG"
 msgstr "EPG"
@@ -185,12 +181,8 @@ msgid "Search programs"
 msgstr "番組を検索します"
 
 msgctxt "#30919"
-msgid "%m/%d"
-msgstr "%m月%d日"
-
-msgctxt "#30920"
-msgid "Mon,Tue,Wed,Thu,Fri,Sat,Sun"
-msgstr "月,火,水,木,金,土,日"
+msgid "%m/%d(%a)"
+msgstr "%m月%d日(%a)"
 
 msgctxt "#30921"
 msgid "Show page {page} out of {totalpages} pages ({hit}programs)"

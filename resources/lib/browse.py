@@ -21,73 +21,66 @@ from resources.lib.smartlist import SmartList
 from resources.lib.request import Request
 from resources.lib.item import Item
 from resources.lib.downloader import Downloader
+from resources.lib.holiday import Holiday
 
 from resources.lib.initialize import initializeSession
 from resources.lib.initialize import checkSettings
 
 
-class Browse:
+class Browse(Common):
 
     def __init__(self, query=None):
-        self.query = query or 'n=%d&p=1&video=all' % (Common.ITEMS)
+        self.query = query or 'n=%d&p=1&video=all' % (self.ITEMS)
         self.args = parse_qs(self.query, keep_blank_values=True)
         for key in self.args.keys():
             self.args[key] = self.args[key][0]
+        # 祝祭日判定
+        self.holiday = Holiday(os.path.join(self.DATA_PATH, 'data.db'))
 
     def top(self):
         # 放送中の番組
-        self.add_directory_item(Common.STR(30916), self.query, 'searchOnAir', context='top', iconimage=Common.RETRO_TV)
+        self.add_directory_item(self.STR(30916), self.query, 'searchOnAir', context='top', iconimage=self.RETRO_TV)
         # 検索:日付
-        self.add_directory_item(Common.STR(30933), '', 'selectDate', context='top', iconimage=Common.CALENDAR)
+        self.add_directory_item(self.STR(30933), '', 'selectDate', context='top', iconimage=self.CALENDAR)
         # 検索:チャンネル
-        self.add_directory_item(Common.STR(30934), '', 'selectChannel', context='top', iconimage=Common.RADIO_TOWER)
+        self.add_directory_item(self.STR(30934), '', 'selectChannel', context='top', iconimage=self.RADIO_TOWER)
         # 検索:ジャンル
-        self.add_directory_item(Common.STR(30935), '', 'selectGenre', context='top', iconimage=Common.CATEGORIZE)
+        self.add_directory_item(self.STR(30935), '', 'selectGenre', context='top', iconimage=self.CATEGORIZE)
         # お気に入り
-        self.add_directory_item(Common.STR(30923), '%s&rank=all' % self.query, 'search', context='top', iconimage=Common.FAVORITE_FOLDER)
+        self.add_directory_item(self.STR(30923), '%s&rank=all' % self.query, 'search', context='top', iconimage=self.FAVORITE_FOLDER)
         # ダウンロード
-        Downloader().top(Common.DOWNLOADS_FOLDER)
+        Downloader().top(self.DOWNLOADS_FOLDER)
         # スマートリスト
         for i in SmartList().getList():
             title = i['title']
             query = i['query']
-            self.add_directory_item(title, query, 'search', context='smartlist', iconimage=Common.BROWSE_FOLDER)
+            self.add_directory_item(title, query, 'search', context='smartlist', iconimage=self.BROWSE_FOLDER)
         # end of directory
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
     def select_date(self):
         # すべての日付
-        name = '[COLOR lightgreen]%s[/COLOR]' % Common.STR(30912)
+        name = '[COLOR lightgreen]%s[/COLOR]' % self.STR(30912)
         if self.args.get('ch') is None:
             mode = 'selectChannel'
         elif self.args.get('genre0') is None:
             mode = 'selectGenre'
         else:
             mode = 'search'
-        self.add_directory_item(name, '%s&sdate=&edate=' % self.query, mode, iconimage=Common.CALENDAR)
+        self.add_directory_item(name, '%s&sdate=&edate=' % self.query, mode, iconimage=self.CALENDAR)
         # 月,火,水,木,金,土,日
-        w = Common.STR(30920).split(',')
         for i in range(120):
             d = datetime.date.today() - datetime.timedelta(i)
-            wd = d.weekday()
-            # 月日
-            # date1 = '%s(%s)' % (d.strftime(Common.STR(30919)), w[wd])
-            date1 = '%s(%s)' % (Common.strftime(d, Common.STR(30919)), w[wd])
-            date2 = d.strftime('%Y-%m-%d')
-            if Common.isholiday(date2) or wd == 6:
-                name = '[COLOR red]%s[/COLOR]' % date1
-            elif wd == 5:
-                name = '[COLOR blue]%s[/COLOR]' % date1
-            else:
-                name = date1
-            query = '%s&sdate=%s 00:00:00&edate=%s 23:59:59' % (self.query, date2, date2)
+            date = d.strftime('%Y-%m-%d')
+            name = self.holiday.convert(date, self.STR(30919))
+            query = '%s&sdate=%s 00:00:00&edate=%s 23:59:59' % (self.query, date, date)
             if self.args.get('ch') is None:
                 mode = 'selectChannel'
             elif self.args.get('genre0') is None:
                 mode = 'selectGenre'
             else:
                 mode = 'search'
-            self.add_directory_item(name, query, mode, iconimage=Common.CALENDAR)
+            self.add_directory_item(name, query, mode, iconimage=self.CALENDAR)
         # end of directory
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
@@ -102,7 +95,7 @@ class Browse:
             else:
                 mode = 'search'
             query = '%s&%s' % (self.query, urlencode({'ch': id}))
-            self.add_directory_item(name, query, mode, iconimage=Common.RADIO_TOWER)
+            self.add_directory_item(name, query, mode, iconimage=self.RADIO_TOWER)
         # end of directory
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
@@ -118,10 +111,10 @@ class Browse:
                 else:
                     mode = 'search'
                 query = '%s&%s' % (self.query, urlencode({'genre0': '', 'genre1': ''}))
-                self.add_directory_item(name, query, mode, iconimage=Common.CATEGORIZE)
+                self.add_directory_item(name, query, mode, iconimage=self.CATEGORIZE)
             else:
                 query = '%s&%s' % (self.query, urlencode({'genre0': id}))
-                self.add_directory_item(name, query, 'selectSubgenre', iconimage=Common.CATEGORIZE)
+                self.add_directory_item(name, query, 'selectSubgenre', iconimage=self.CATEGORIZE)
         # end of directory
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
@@ -137,7 +130,7 @@ class Browse:
             else:
                 mode = 'search'
             query = '%s&%s' % (self.query, urlencode({'genre1': id}))
-            self.add_directory_item(name, query, mode, iconimage=Common.CATEGORIZE)
+            self.add_directory_item(name, query, mode, iconimage=self.CATEGORIZE)
         # end of directory
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
@@ -149,11 +142,11 @@ class Browse:
             if response_data['status'] == 1:
                 xbmc.executebuiltin('Container.Refresh')
             else:
-                Common.log('switch favorites failed (status=%s)' % response_data['status'], error=True)
-                Common.notify('Operation failed')
+                self.log('switch favorites failed (status=%s)' % response_data['status'], error=True)
+                self.notify('Operation failed')
         else:
-            Common.log('empty response', error=True)
-            Common.notify('Operation failed')
+            self.log('empty response', error=True)
+            self.notify('Operation failed')
 
     def search(self, onair=False, retry=True):
         # 検索
@@ -178,11 +171,11 @@ class Browse:
                 # 検索結果の続きがある場合は次のページへのリンクを表示
                 hit = int(response_data['hit'])
                 page = int(self.args.get('p'))
-                if hit > page * Common.ITEMS:
+                if hit > page * self.ITEMS:
                     self.args['p'] = page + 1
                     query = urlencode(self.args)
                     # 次のページへ
-                    self.add_directory_item('[COLOR lightgreen]%s[/COLOR]' % (Common.STR(30922)), query, 'search', iconimage=Common.RIGHT)
+                    self.add_directory_item('[COLOR lightgreen]%s[/COLOR]' % (self.STR(30922)), query, 'search', iconimage=self.RIGHT)
                 # end of directory
                 xbmcplugin.endOfDirectory(int(sys.argv[1]))
             elif retry is True:
@@ -191,18 +184,23 @@ class Browse:
                     if checkSettings():
                         self.search(onair, retry=False)
                     else:
-                        Common.log('invalid settings', error=True)
-                        Common.notify('Search failed')
+                        self.log('invalid settings', error=True)
+                        self.notify('Search failed')
                 else:
-                    Common.log('session initialization failed', error=True)
-                    Common.notify('Search failed')
+                    self.log('session initialization failed', error=True)
+                    self.notify('Search failed')
             else:
                 # リトライも失敗
-                Common.log('retry failed', error=True)
-                Common.notify('Search failed')
+                self.log('retry failed', error=True)
+                self.notify('Search failed')
         else:
-            Common.log('empty response', error=True)
-            Common.notify('Search failed')
+            self.log('empty response', error=True)
+            self.notify('Search failed')
+
+    def play(self, stream):
+        listitem = xbmcgui.ListItem(path=stream)
+        listitem.setProperty('IsPlayable', 'true')
+        xbmcplugin.setResolvedUrl(handle=int(sys.argv[1]), succeeded=True, listitem=listitem)
 
     def add_item(self, item, onair=False):
         # listitem
@@ -224,7 +222,8 @@ class Browse:
         # context menu
         listitem.addContextMenuItems(item.contextmenu, replaceItems=True)
         # add directory item
-        xbmcplugin.addDirectoryItem(int(sys.argv[1]), s['url'], listitem, False)
+        url = '%s?%s' % (sys.argv[0], urlencode({'mode': 'play', 'stream': s['url']}))
+        xbmcplugin.addDirectoryItem(int(sys.argv[1]), url, listitem, False)
 
     def add_directory_item(self, name, url, mode, context='', iconimage=''):
         # listitem
@@ -235,26 +234,26 @@ class Browse:
         if context == 'smartlist':
             # スマートリストを編集
             contextMenu.append((
-                Common.STR(30904),
+                self.STR(30904),
                 'RunPlugin(%s?%s)' % (sys.argv[0], urlencode({'mode': 'beginEditSmartList', 'name': name}))))
             # スマートリストを削除
             contextMenu.append((
-                Common.STR(30905),
+                self.STR(30905),
                 'RunPlugin(%s?%s)' % (sys.argv[0], urlencode({'mode': 'deleteSmartList', 'name': name}))))
         elif context != 'top':
             # トップに戻る
             contextMenu.append((
-                Common.STR(30936),
+                self.STR(30936),
                 'Container.Update(%s,replace)' % (sys.argv[0])))
         # アドオン設定
-        contextMenu.append((Common.STR(30937), 'RunPlugin(%s?mode=openSettings)' % sys.argv[0]))
+        contextMenu.append((self.STR(30937), 'RunPlugin(%s?mode=openSettings)' % sys.argv[0]))
         listitem.addContextMenuItems(contextMenu, replaceItems=True)
         # add directory item
         url = '%s?%s' % (sys.argv[0], urlencode({'mode': mode, 'url': url}))
         xbmcplugin.addDirectoryItem(int(sys.argv[1]), url, listitem, True)
 
 
-class UpdateOnAir:
+class UpdateOnAir(Common):
 
     def __init__(self, programs):
         enddate = []
@@ -275,22 +274,22 @@ class UpdateOnAir:
         now = time.time()
         if now > self.next_aired:
             xbmc.executebuiltin('Container.Refresh')
-            Common.log('updateOnAir: xbmc.executebuiltin')
+            self.log('updateOnAir: xbmc.executebuiltin')
         else:
             # 遅延を設定
             delay = self.next_aired - now + 30
             if delay < 0:
                 delay = 0
             # idを設定
-            Common.write_file(Common.RESUME_FILE, '')
-            id = os.path.getmtime(Common.RESUME_FILE)
+            self.write_file(self.RESUME_FILE, '')
+            id = os.path.getmtime(self.RESUME_FILE)
             # スレッドを起動
             threading.Timer(delay, self.check_onair, args=[id]).start()
-            Common.log('updateOnAir: threading.Timer.start: %d %f' % (id, delay))
+            self.log('updateOnAir: threading.Timer.start: %d %f' % (id, delay))
 
     def check_onair(self, id):
         # idをチェック
-        if os.path.isfile(Common.RESUME_FILE) and id == os.path.getmtime(Common.RESUME_FILE):
+        if os.path.isfile(self.RESUME_FILE) and id == os.path.getmtime(self.RESUME_FILE):
             # ウィンドウをチェック
             path = xbmc.getInfoLabel('Container.FolderPath')
             if path == sys.argv[0] + '?mode=searchOnAir&url=n%3d100%26p%3d1%26video%3dall':

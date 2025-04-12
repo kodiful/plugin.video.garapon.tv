@@ -106,6 +106,10 @@ if __name__ == '__main__':
     elif mode == 'selectSubgenre':
         Browse(url).select_subgenre()
 
+    # play
+    elif mode == 'play':
+        Browse(url).play(args.get('stream'))
+
     # search
     elif mode == 'search':
         Browse(url).search()
