@@ -26,7 +26,7 @@
 
 初回起動時にはアドオン設定画面が表示されます。
 
-![アドオン設定画面](https://github.com/kodiful/plugin.video.garapon.tv/assets/12268536/dc3182eb-e946-482a-b625-5c3033898c4e)
+![アドオン設定画面](docs/images/1_初期状態/1_アドオン設定.png)
 
 
 ガラポンIDおよびパスワードを入力して「設定を更新」を選択してください（「OK」を選択しても設定は更新されません）。
@@ -41,13 +41,13 @@
 
 初回起動時の設定が完了すると、トップ画面が表示されます。
 
-![トップ画面](https://github.com/kodiful/plugin.video.garapon.tv/assets/12268536/752a9ede-5674-4133-99a7-5850f77aa16e)
+![トップ画面](docs/images/1_初期状態/2_トップ画面.png)
 
 ### 放送中の番組
 
 現在放送中の番組のリストが表示されます。
 
-![放送中の番組](https://github.com/kodiful/plugin.video.garapon.tv/assets/12268536/cb2e65ed-d39d-4369-a8ba-47cfd8c55c02)
+![放送中の番組](docs/images/2_放送中の番組/1_放送中の番組.png)
 
 ここで見たい番組を選択すると、番組が再生されます（Kodiの設定によっては番組の詳細情報が表示されます）。
 
@@ -56,23 +56,23 @@
 ガラポンTV端末に録画されている番組を検索します。
 日付→チャンネル→ジャンルの順に検索条件を設定します。まず、日付を選択します。
 
-![日付選択画面](https://github.com/kodiful/plugin.video.garapon.tv/assets/12268536/4d465db9-f3ca-403c-8584-aeae11a1e71c)
+![日付選択画面](docs/images/3_番組検索/1_日付選択.png)
 
 次にチャンネルを選択します。
 
-![チャンネル選択画面](https://github.com/kodiful/plugin.video.garapon.tv/assets/12268536/9ba8b16d-d42d-4064-a7a6-086df8df439e)
+![チャンネル選択画面](docs/images/3_番組検索/2_チャンネル選択.png)
 
 次にジャンルを選択します。
 
-![ジャンル選択画面](https://github.com/kodiful/plugin.video.garapon.tv/assets/12268536/aff4d306-2a76-445c-9d40-214b2a8d0fca)
+![ジャンル選択画面](docs/images/3_番組検索/3_ジャンル選択.png)
 
 次にサブジャンルを選択します。選択後、検索が実行されます。
 
-![サブジャンル選択画面](https://github.com/kodiful/plugin.video.garapon.tv/assets/12268536/10b71645-74fd-4b47-8ac5-e58b947ed1f4)
+![サブジャンル選択画面](docs/images/3_番組検索/4_サブジャンル選択.png)
 
 検索結果が表示されます。
 
-![検索結果画面](https://github.com/kodiful/plugin.video.garapon.tv/assets/12268536/9020f95e-5335-473c-a860-b62489677046)
+![検索結果画面](docs/images/3_番組検索/5_検索結果.png)
 
 ここで見たい番組を選択すると、番組が再生されます（Kodiの設定によっては番組の詳細情報が表示されます）。
 
@@ -94,32 +94,32 @@
 
 番組を選択した状態でコンテクストメニューを表示し、その番組に関する操作を行うことができます。
 
-![コンテクストメニュー](https://github.com/kodiful/plugin.video.garapon.tv/assets/12268536/ffc0879d-e5d2-4c12-913f-ff116226836a)
+![コンテクストメニュー](docs/images/4_番組コンテクストメニュー/1_コンテクストメニュー.png)
 
 ### 詳細情報
 
 選択されている番組の詳細情報を表示します。
 
-![コンテクストメニュー](https://github.com/kodiful/plugin.video.garapon.tv/assets/12268536/0caae1c0-c1fc-4c57-ad56-cbe664e430b7)
+![詳細情報](docs/images/4_番組コンテクストメニュー/2_詳細情報.png)
 
 ### スマートリストに追加
 
 選択されている番組の番組情報に基づいて、スマートリストの編集画面を表示します。
 スマートリストとは、帯番組の検索などをワンクリックで実行するために、チャンネル、ジャンル、キーワードなどの検索条件をまとめて保存するものです。
 
-![スマートリストに追加](https://github.com/kodiful/plugin.video.garapon.tv/assets/12268536/30e20346-ebeb-4c14-b1f7-77f9d5cf32d8)
+![スマートリストに追加](docs/images/4_番組コンテクストメニュー/3_スマートリストに追加/1_選択直後.png)
 
 キーワード等を編集します。
 
-![スマートリストに追加](https://github.com/kodiful/plugin.video.garapon.tv/assets/12268536/df885309-01d0-4148-8665-6cbc65d7a22b)
+![スマートリストに追加](docs/images/4_番組コンテクストメニュー/3_スマートリストに追加/2_キーワード編集.png)
 
 「スマートリストを追加」を選択して追加操作は完了です。スマートリストがトップ画面に追加されます。
 
-![スマートリストに追加](https://github.com/kodiful/plugin.video.garapon.tv/assets/12268536/b31d071e-8eb2-40d1-9301-aee804b7f474)
+![スマートリストに追加](docs/images/4_番組コンテクストメニュー/3_スマートリストに追加/3_トップ画面に追加.png)
 
 追加されたスマートリストを選択すると、設定したチャンネル、ジャンル、キーワードなどにマッチする番組が検索結果として表示されます。
 
-![スマートリストに追加](https://github.com/kodiful/plugin.video.garapon.tv/assets/12268536/04a8d220-b014-4e84-a452-c63b25e88a82)
+![スマートリストに追加](docs/images/4_番組コンテクストメニュー/3_スマートリストに追加/4_スマートリスト選択後.png)
 
 ### お気に入りに追加
 
@@ -136,13 +136,13 @@
 
 スマートリストを選択した状態でコンテクストメニューを表示し、そのスマートリストの編集、削除を行うことができます。
 
-![アドオン設定画面](https://github.com/kodiful/plugin.video.garapon.tv/assets/12268536/ae581bb1-b63c-4018-9536-0a665057ff3f)
+![アドオン設定画面](docs/images/5_スマートリスト/1_コンテクストメニュー.png)
 
 ### スマートリストを編集
 
 スマートリスト編集画面が表示されます。
 
-![スマートリスト編集画面](https://github.com/kodiful/plugin.video.garapon.tv/assets/12268536/5b9aff8c-7587-409d-994e-82d7e546a7fa)
+![スマートリスト編集画面](docs/images/5_スマートリスト/2_スマートリスト編集.png)
 
 編集した後、「スマートリストを変更」を選択してください。
 
@@ -154,7 +154,7 @@
 
 ## アドオン設定画面-ガラポンTV設定
 
-![アドオン設定画面（ガラポンTV設定）](https://github.com/kodiful/plugin.video.garapon.tv/assets/12268536/6d8647b0-68c6-4269-9081-0679bdb6795b)
+![アドオン設定画面（ガラポンTV設定）](docs/images/6_アドオン設定/1_ガラポンTV設定.png)
 
 ### ガラポンID
 
@@ -188,7 +188,7 @@
 
 ## アドオン設定画面-その他の設定
 
-![アドオン設定画面（その他の設定）](https://github.com/kodiful/plugin.video.garapon.tv/assets/12268536/9706c15e-06ff-42d7-aeb8-440a3e86406d)
+![アドオン設定画面（その他の設定）](docs/images/6_アドオン設定/2_その他の設定.png)
 
 ### サムネイルキャッシュをクリア
 
@@ -210,7 +210,7 @@
 
 ## アドオン設定画面-スマートリスト
 
-![アドオン設定画面（スマートリスト）](https://github.com/kodiful/plugin.video.garapon.tv/assets/12268536/1ad243c2-9c64-4191-8056-8d9633c036c5)
+![アドオン設定画面（スマートリスト）](docs/images/6_アドオン設定/3_スマートリスト.png)
 
 スマートリストの編集画面です。スマートリストとは、帯番組の検索などをワンクリックで実行するために、チャンネル、ジャンル、キーワードなどの検索条件をまとめて保存するものです。
 
