@@ -57,7 +57,9 @@ class Common:
 
     # ファイルパス
     SETTINGS_FILE = os.path.join(RESOURCES_PATH, 'settings.xml')
-    TEMPLATE_FILE = os.path.join(DATA_PATH, 'settings.xml')
+    ORIGINAL_SETTINGS = os.path.join(DATA_PATH, 'settings', 'settings.xml')
+    SMARTLIST_SETTINGS = os.path.join(DATA_PATH, 'settings', 'smartlist.xml')
+    TEMPLATE_FILE = os.path.join(DATA_PATH, 'templates', 'settings.xml')
     GENRE_FILE = os.path.join(DATA_PATH, 'genre.js')
     CHANNEL_FILE = os.path.join(PROFILE_PATH, 'channel.js')
     SMARTLIST_FILE = os.path.join(PROFILE_PATH, 'smartlist.js')

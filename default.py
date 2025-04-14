@@ -63,8 +63,10 @@ if __name__ == '__main__':
 
     # アドオン設定をコピー
     settings = {}
+    require_settings = False
     if not os.path.isfile(Common.SETTINGS_FILE):
-        # settings.xmlがない場合はテンプレートをコピーする
+        # settings.xmlがない場合は暫定的にテンプレートをコピーする
+        require_settings = True
         shutil.copyfile(Common.TEMPLATE_FILE, Common.SETTINGS_FILE)
     else:
         for id in ['keyword', 'query']:
@@ -88,7 +90,10 @@ if __name__ == '__main__':
     if mode == '':
         # 必須設定をチェック
         if checkSettings():
-            # 設定済であればトップ画面を開く
+            # SETTINGS_FILEを作成
+            if require_settings:
+                initializeChannel()
+            # トップ画面を開く
             Browse().top()
         else:
             # 未設定の場合はダイアログを開く
@@ -132,8 +137,10 @@ if __name__ == '__main__':
         # update cache settings
         Cache().update()
         # open settings & focus smartlist category
+        shutil.copy(Common.SMARTLIST_SETTINGS, Common.SETTINGS_FILE)
         xbmc.executebuiltin('Addon.OpenSettings(%s)' % Common.ADDON_ID)
-        xbmc.executebuiltin('SetFocus(-98)')
+        xbmc.sleep(1000)
+        shutil.copy(Common.ORIGINAL_SETTINGS, Common.SETTINGS_FILE)
 
     elif mode == 'endEditSmartList':
         SmartList(settings).endEdit()

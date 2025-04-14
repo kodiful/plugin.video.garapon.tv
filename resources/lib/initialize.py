@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import os
+import shutil
 import json
 
 from resources.lib.common import Common
@@ -107,6 +109,17 @@ def initializeChannel():
             )
             # 設定画面をファイルに書き出す
             Common.write_file(Common.SETTINGS_FILE, source)
+            # 付随するファイルを作成する
+            shutil.copy(Common.SETTINGS_FILE, Common.ORIGINAL_SETTINGS)
+            with open(Common.SMARTLIST_SETTINGS, 'w', encoding='utf-8') as f:
+                lines = []
+                for line in source.split('\n'):
+                    if line.find('30100') > -1:
+                        lines.append('<!--')
+                    if line.find('30000') > -1:
+                        lines.append('-->')
+                    lines.append(line)
+                f.writelines(map(lambda x: x + '\n', lines))
             # 完了
             Common.notify('Channel initialized successfully')
             return True
