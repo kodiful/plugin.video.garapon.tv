@@ -110,6 +110,7 @@ def initializeChannel():
             # 設定画面をファイルに書き出す
             Common.write_file(Common.SETTINGS_FILE, source)
             # 付随するファイルを作成する
+            os.makedirs(os.path.join(Common.DATA_PATH, 'settings'), exist_ok=True)
             shutil.copy(Common.SETTINGS_FILE, Common.ORIGINAL_SETTINGS)
             with open(Common.SMARTLIST_SETTINGS, 'w', encoding='utf-8') as f:
                 lines = []
