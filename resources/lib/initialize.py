@@ -5,6 +5,7 @@ import shutil
 import json
 
 from resources.lib.common import Common
+from resources.lib.db import ThreadLocal
 from resources.lib.channel import Channel
 from resources.lib.genre import Genre
 from resources.lib.request import Request
@@ -75,40 +76,71 @@ def initializeSession():
 
 
 def initializeChannel():
+    # DB
+    db = ThreadLocal.db
     # リセット
     Common.SET('garapon_ch', '')
+    db.cursor.execute('DELETE FROM channels WHERE ch_id != ""')
     # チャンネル情報を取得
     response_body = Request().channel()
     if response_body:
         response_data = json.loads(response_body)
         if response_data['status'] == 1:
-            # チャンネル情報をファイルに書き出す
-            Common.write_json(Common.CHANNEL_FILE, response_data)
+            # チャンネル情報をDBに格納
+            values = []
+            for key, value in response_data['ch_list'].items():
+                values.append((key, value['ch_name'], value['hash_tag']))
+            db.cursor.executemany('''INSERT INTO channels VALUES (?, ?, ?)''', values)
             # チャンネル数を設定
             Common.SET('garapon_ch', '%d channels' % len(response_data['ch_list'].keys()))
             # 設定画面のテンプレートを読み込む
-            template = Common.read_file(Common.TEMPLATE_FILE)
+            with open(Common.TEMPLATE_FILE, 'r', encoding='utf-8') as f:
+                template = f.read()
+            # テンプレートに書き出すチャンネル情報
+            sql = '''SELECT GROUP_CONCAT(ch_name, '|') FROM channels
+            ORDER BY ch_id'''
+            db.cursor.execute(sql)
+            channels, = db.cursor.fetchone()
             # テンプレートに書き出すジャンル情報
-            genre = Genre().getLabel()
+            sql = '''SELECT GROUP_CONCAT(subgenre_name, '|') FROM genres
+            GROUP BY genre_id
+            ORDER BY CAST(genre_id AS INTEGER), CAST(subgenre_id AS INTEGER)'''
+            db.cursor.execute(sql)
+            genres = [joined for joined, in db.cursor.fetchall()]
             # チャンネル情報とあわせてテンプレートに適用
             source = template.format(
-                channel=Channel().getLabel(),
-                g0=genre['g0'],
-                g00=genre['g00'],
-                g01=genre['g01'],
-                g02=genre['g02'],
-                g03=genre['g03'],
-                g04=genre['g04'],
-                g05=genre['g05'],
-                g06=genre['g06'],
-                g07=genre['g07'],
-                g08=genre['g08'],
-                g09=genre['g09'],
-                g10=genre['g10'],
-                g11=genre['g11']
+                channel=channels,
+                g=genres[0],
+                g0=genres[1],
+                g1=genres[2],
+                g2=genres[3],
+                g3=genres[4],
+                g4=genres[5],
+                g5=genres[6],
+                g6=genres[7],
+                g7=genres[8],
+                g8=genres[9],
+                g9=genres[10],
+                g10=genres[11],
+                g11=genres[12],
+                c=channels.split('|')[0],
+                d=genres[0].split('|')[0],
+                d0=genres[1].split('|')[0],
+                d1=genres[2].split('|')[0],
+                d2=genres[3].split('|')[0],
+                d3=genres[4].split('|')[0],
+                d4=genres[5].split('|')[0],
+                d5=genres[6].split('|')[0],
+                d6=genres[7].split('|')[0],
+                d7=genres[8].split('|')[0],
+                d8=genres[9].split('|')[0],
+                d9=genres[10].split('|')[0],
+                d10=genres[11].split('|')[0],
+                d11=genres[12].split('|')[0],
             )
             # 設定画面をファイルに書き出す
-            Common.write_file(Common.SETTINGS_FILE, source)
+            with open(Common.SETTINGS_FILE, 'w', encoding='utf-8') as f:
+                f.write(source)
             # 付随するファイルを作成する
             os.makedirs(os.path.join(Common.DATA_PATH, 'settings'), exist_ok=True)
             shutil.copy(Common.SETTINGS_FILE, Common.ORIGINAL_SETTINGS)

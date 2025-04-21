@@ -53,6 +53,8 @@ class Common:
         os.makedirs(CACHE_PATH)
 
     # データベース
+    CONTENTS_DB = os.path.join(PROFILE_PATH, 'contents.db')
+    TEMPLATE_DB = os.path.join(DATA_PATH, 'templates', 'contents.db')
     CACHE_DB = os.path.join(DB_PATH, 'Textures13.db')
 
     # ファイルパス
@@ -60,10 +62,6 @@ class Common:
     ORIGINAL_SETTINGS = os.path.join(DATA_PATH, 'settings', 'settings.xml')
     SMARTLIST_SETTINGS = os.path.join(DATA_PATH, 'settings', 'smartlist.xml')
     TEMPLATE_FILE = os.path.join(DATA_PATH, 'templates', 'settings.xml')
-    GENRE_FILE = os.path.join(DATA_PATH, 'genre.js')
-    CHANNEL_FILE = os.path.join(PROFILE_PATH, 'channel.js')
-    SMARTLIST_FILE = os.path.join(PROFILE_PATH, 'smartlist.js')
-    RESUME_FILE = os.path.join(PROFILE_PATH, 'resume.js')
 
     # サムネイル
     RETRO_TV = os.path.join(IMAGE_PATH, 'tv.png')
@@ -74,79 +72,6 @@ class Common:
     DOWNLOADS_FOLDER = os.path.join(IMAGE_PATH, 'folder.png')
     BROWSE_FOLDER = os.path.join(IMAGE_PATH, 'set.png')
     RIGHT = os.path.join(IMAGE_PATH, 'play.png')
-
-    # ファイル読み込み
-    @staticmethod
-    def read_file(filepath, encoding=None):
-        if os.path.isfile(filepath) and os.path.getsize(filepath) > 0:
-            try:
-                with open(filepath, 'rb') as f:
-                    data = f.read()
-                return data.decode(encoding=encoding or chardet.detect(data)['encoding'], errors='ignore')
-            except Exception as e:
-                Common.log(filepath, str(e), error=True)
-                return None
-        else:
-            return None
-
-    # ファイル書き出し
-    @staticmethod
-    def write_file(filepath, data):
-        try:
-            if isinstance(data, bytes):
-                with open(filepath, 'wb') as f:
-                    f.write(data)
-            elif isinstance(data, str):
-                with open(filepath, 'w', encoding='utf-8', errors='ignore') as f:
-                    f.write(data)
-            else:
-                raise TypeError
-        except Exception as e:
-            Common.log(filepath, str(e), error=True)
-
-    # JSONデータ読み込み
-    @staticmethod
-    def read_json(filepath):
-        data = Common.read_file(filepath)
-        if data:
-            try:
-                return json.loads(data)
-            except Exception as e:
-                Common.log(filepath, str(e), error=True)
-                return None
-        else:
-            return None
-
-    # JSONデータ書き出し
-    @staticmethod
-    def write_json(filepath, data):
-        try:
-            Common.write_file(filepath, json.dumps(data, sort_keys=True, ensure_ascii=False, indent=4))
-        except Exception as e:
-            Common.log(filepath, str(e), error=True)
-
-    # URLから読み込み
-    @staticmethod
-    def read_url(url, headers={}):
-        opener = urllib.request.build_opener()
-        h = [('User-Agent', 'Mozilla/5.0')]  # User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:68.0) Gecko/20100101 Firefox/68.0
-        for key, val in headers.items():
-            h.append((key, val))
-        opener.addheaders = h
-        try:
-            response = opener.open(url)
-            buf = response.read()
-            response.close()
-        except urllib.error.HTTPError as e:
-            Common.log('HTTPError url:{url}, code:{code}'.format(url=url, code=e.code), error=True)
-            buf = ''
-        except urllib.error.URLError as e:
-            Common.log('URLError url:{url}, reason:{reason}'.format(url=url, reason=e.reason), error=True)
-            buf = ''
-        except Exception as e:
-            Common.log(url, str(e), error=True)
-            buf = ''
-        return buf
 
     # 通知
     @staticmethod
@@ -212,9 +137,3 @@ class Common:
         date, _ = datetimestr.split(' ')
         year, month, day = map(int, date.split('-'))
         return calendar.weekday(year, month, day)
-
-    # workaround for encode problems for strftime on Windows
-    # cf. https://ja.stackoverflow.com/questions/44597/windows上のpythonのdatetime-strftimeで日本語を使うとエラーになる
-    @staticmethod
-    def strftime(d, format):
-        return d.strftime(format.encode('unicode-escape').decode()).encode().decode('unicode-escape')

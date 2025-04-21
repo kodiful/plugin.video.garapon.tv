@@ -3,25 +3,19 @@
 import sys
 import os
 import shutil
-import datetime
-
+import socket
 from urllib.parse import parse_qs
 
 import xbmc
 
 from resources.lib.common import Common
+from resources.lib.db import ThreadLocal, DB
 from resources.lib.browse import Browse
-from resources.lib.channel import Channel
-from resources.lib.genre import Genre
-from resources.lib.smartlist import SmartList
+from resources.lib.smartlist import Smartlist
 from resources.lib.initialize import initializeNetwork
 from resources.lib.initialize import initializeSession
 from resources.lib.initialize import initializeChannel
 from resources.lib.initialize import checkSettings
-
-# HTTP接続におけるタイムアウト(秒)
-import socket
-socket.setdefaulttimeout(60)
 
 
 class Cache():
@@ -53,41 +47,30 @@ class Cache():
 
 if __name__ == '__main__':
 
+    # HTTP接続におけるタイムアウト(秒)
+    socket.setdefaulttimeout(60)
+
+    # DBインスタンスを作成
+    ThreadLocal.db = DB()
+
     # パラメータ抽出
     args = parse_qs(sys.argv[2][1:], keep_blank_values=True)
-    for key in args.keys():
-        args[key] = args[key][0]
-
-    mode = args.get('mode', '')
-    url = args.get('url', '')
+    args = dict(map(lambda x: (x[0], x[1][0]), args.items()))
 
     # アドオン設定をコピー
-    settings = {}
     require_settings = False
-    if not os.path.isfile(Common.SETTINGS_FILE):
+    if os.path.isfile(Common.SETTINGS_FILE) is False:
         # settings.xmlがない場合は暫定的にテンプレートをコピーする
         require_settings = True
         shutil.copyfile(Common.TEMPLATE_FILE, Common.SETTINGS_FILE)
-    else:
-        for id in ['keyword', 'query']:
-            settings[id] = Common.GET(id)
-            Common.SET(id, '')
-        for id in ['source']:
-            settings[id] = Common.GET(id)
-            Common.SET(id, '0')
-        for id in ['channel']:
-            settings[id] = Common.GET(id)
-            Common.SET(id, Channel().getDefault())
-        for id in ['g0', 'g00', 'g01', 'g02', 'g03', 'g04', 'g05', 'g06', 'g07', 'g08', 'g09', 'g10', 'g11']:
-            settings[id] = Common.GET(id)
-            Common.SET(id, Genre().getDefault(id))
 
     # キャッシュサイズが未設定の場合は設定
     if Common.GET('cache') == '':
         Cache().update()
 
     # 各種処理
-    if mode == '':
+    action = args.get('action', '')
+    if action == '':
         # 必須設定をチェック
         if checkSettings():
             # SETTINGS_FILEを作成
@@ -99,104 +82,99 @@ if __name__ == '__main__':
             # 未設定の場合はダイアログを開く
             xbmc.executebuiltin('Addon.OpenSettings(%s)' % Common.ADDON_ID)
 
-    elif mode == 'selectDate':
-        Browse(url).select_date()
+    elif action == 'selectDate':
+        Browse().select_date()
 
-    elif mode == 'selectChannel':
-        Browse(url).select_channel()
+    elif action == 'selectChannel':
+        Browse().select_channel()
 
-    elif mode == 'selectGenre':
-        Browse(url).select_genre()
+    elif action == 'selectGenre':
+        Browse().select_genre()
 
-    elif mode == 'selectSubgenre':
-        Browse(url).select_subgenre()
+    elif action == 'selectSubgenre':
+        Browse().select_subgenre()
 
     # play
-    elif mode == 'play':
-        Browse(url).play(args.get('stream'))
+    elif action == 'play':
+        Browse().play(args.get('stream'))
 
     # search
-    elif mode == 'search':
-        Browse(url).search()
+    elif action == 'search':
+        Browse().search()
 
-    # search onair
-    elif mode == 'searchOnAir':
-        Browse('%s&dt=e&sdate=%s' % (url, datetime.datetime.today().strftime('%Y-%m-%d %H:%M:%S'))).search(onair=True)
+    # onair
+    elif action == 'searchOnAir':
+        Browse().search(target='onair')
 
-    # switch favorites
-    elif mode == 'switchFavorites':
-        Browse(url).favorites()
+    # favorites
+    elif action == 'searchFavorites':
+        Browse().search(target='favorites')
+
+    elif action == 'setFavorites':
+        Browse().set_favorites()
 
     # smartlist
-    elif mode == 'beginEditSmartList':
-        name = args.get('name')
-        ch = args.get('ch', '')
-        g0 = args.get('g0', '')
-        g1 = args.get('g1', '')
-        SmartList(settings).beginEdit(name, ch, g0, g1)
-        # update cache settings
-        Cache().update()
-        # open settings & focus smartlist category
-        shutil.copy(Common.SMARTLIST_SETTINGS, Common.SETTINGS_FILE)
-        xbmc.executebuiltin('Addon.OpenSettings(%s)' % Common.ADDON_ID)
-        xbmc.sleep(1000)
-        shutil.copy(Common.ORIGINAL_SETTINGS, Common.SETTINGS_FILE)
+    elif action == 'searchSmartlist':
+        Browse().search(target='smartlist')
 
-    elif mode == 'endEditSmartList':
-        SmartList(settings).endEdit()
-        # refresh top page
-        xbmc.executebuiltin('Container.Update(%s,replace)' % sys.argv[0])
+    elif action == 'editSmartlist':
+        Smartlist().edit()
 
-    elif mode == 'deleteSmartList':
-        name = args.get('name')
-        SmartList(settings).delete(name)
-        # refresh top page
-        xbmc.executebuiltin('Container.Update(%s,replace)' % sys.argv[0])
+    elif action == 'deleteSmartlist':
+        Smartlist().delete()
 
     # settings
-    elif mode == 'initializeSettings':
+    elif action == 'initializeSettings':
         if Common.GET('garapon_auto') == 'true':
             if initializeNetwork():
-                xbmc.executebuiltin('RunPlugin(%s?mode=initializeSession)' % sys.argv[0])
+                xbmc.executebuiltin('RunPlugin(%s?action=initializeSession)' % sys.argv[0])
             else:
-                xbmc.executebuiltin('RunPlugin(%s?mode=openSettings)' % sys.argv[0])
+                xbmc.executebuiltin('RunPlugin(%s?action=openSettings)' % sys.argv[0])
         else:
-            xbmc.executebuiltin('RunPlugin(%s?mode=initializeSession)' % sys.argv[0])
+            xbmc.executebuiltin('RunPlugin(%s?action=initializeSession)' % sys.argv[0])
 
-    elif mode == 'initializeSession':
+    elif action == 'initializeSession':
         if initializeSession():
-            xbmc.executebuiltin('RunPlugin(%s?mode=initializeChannel)' % sys.argv[0])
+            xbmc.executebuiltin('RunPlugin(%s?action=initializeChannel)' % sys.argv[0])
         else:
-            xbmc.executebuiltin('RunPlugin(%s?mode=openSettings)' % sys.argv[0])
+            xbmc.executebuiltin('RunPlugin(%s?action=openSettings)' % sys.argv[0])
 
-    elif mode == 'initializeChannel':
+    elif action == 'initializeChannel':
         if initializeChannel() and checkSettings():
             xbmc.executebuiltin('Container.Update(%s,replace)' % sys.argv[0])
         else:
-            xbmc.executebuiltin('RunPlugin(%s?mode=openSettings)' % sys.argv[0])
+            xbmc.executebuiltin('RunPlugin(%s?action=openSettings)' % sys.argv[0])
 
     # update session only
-    elif mode == 'updateSession':
+    elif action == 'updateSession':
         if initializeSession() and checkSettings():
             xbmc.executebuiltin('Container.Update(%s,replace)' % sys.argv[0])
         else:
-            xbmc.executebuiltin('RunPlugin(%s?mode=openSettings)' % sys.argv[0])
+            xbmc.executebuiltin('RunPlugin(%s?action=openSettings)' % sys.argv[0])
 
     # update channel only
-    elif mode == 'updateChannel':
+    elif action == 'updateChannel':
         if initializeChannel() and checkSettings():
             xbmc.executebuiltin('Container.Update(%s,replace)' % sys.argv[0])
         else:
-            xbmc.executebuiltin('RunPlugin(%s?mode=openSettings)' % sys.argv[0])
+            xbmc.executebuiltin('RunPlugin(%s?action=openSettings)' % sys.argv[0])
 
     # clear cache
-    elif mode == 'clearCache':
+    elif action == 'clearCache':
         Cache().clear()
         Cache().update()
 
     # open settings
-    elif mode == 'openSettings':
+    elif action == 'openSettings':
         # update cache settings
         Cache().update()
         # open settings
         xbmc.executebuiltin('Addon.OpenSettings(%s)' % Common.ADDON_ID)
+
+    # unknown action
+    else:
+        Common.log('unknown action:', action)
+
+    # DBインスタンスを終了
+    ThreadLocal.db.conn.close()
+    ThreadLocal.db = None

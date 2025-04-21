@@ -6,32 +6,32 @@
     <setting label="30104" id="garapon_addr" type="ipaddress" default="" enable="eq(-1,false)"/>
     <setting label="30105" id="garapon_http" type="number" default="" enable="eq(-2,false)"/>
     <setting label="30106" id="garapon_https" type="number" default="" enable="eq(-3,false)"/>
-    <setting label="30107" type="action" option="close" action="RunPlugin(plugin://$ID/?mode=initializeSettings)" enable="!eq(-5,)+!eq(-6,)"/>
+    <setting label="30107" type="action" option="close" action="RunPlugin(plugin://$ID/?action=initializeSettings)" enable="!eq(-5,)+!eq(-6,)"/>
   </category>
   <category label="30200">
-    <setting label="30201" id="cache" type="action" option="close" action="RunPlugin(plugin://$ID/?mode=clearCache)" default=""/>
-    <setting label="30109" id="garapon_session" type="action" option="close" action="RunPlugin(plugin://$ID/?mode=updateSession)" default=""/>
-    <setting label="30110" id="garapon_ch" type="action" option="close" action="RunPlugin(plugin://$ID/?mode=updateChannel)" default=""/>
+    <setting label="30201" id="cache" type="action" option="close" action="RunPlugin(plugin://$ID/?action=clearCache)" default=""/>
+    <setting label="30109" id="garapon_session" type="action" option="close" action="RunPlugin(plugin://$ID/?action=updateSession)" default=""/>
+    <setting label="30110" id="garapon_ch" type="action" option="close" action="RunPlugin(plugin://$ID/?action=updateChannel)" default=""/>
   </category>
   <category label="30000">
-    <setting label="30001" id="channel" type="labelenum" values="{channel}"/>
-    <setting label="30002" id="g0" type="labelenum" values="{g0}"/>
-    <setting label="30003" id="g00" type="labelenum" values="{g00}" visible="eq(-1,1)"/>
-    <setting label="30003" id="g01" type="labelenum" values="{g01}" visible="eq(-2,2)"/>
-    <setting label="30003" id="g02" type="labelenum" values="{g02}" visible="eq(-3,3)"/>
-    <setting label="30003" id="g03" type="labelenum" values="{g03}" visible="eq(-4,4)"/>
-    <setting label="30003" id="g04" type="labelenum" values="{g04}" visible="eq(-5,5)"/>
-    <setting label="30003" id="g05" type="labelenum" values="{g05}" visible="eq(-6,6)"/>
-    <setting label="30003" id="g06" type="labelenum" values="{g06}" visible="eq(-7,7)"/>
-    <setting label="30003" id="g07" type="labelenum" values="{g07}" visible="eq(-8,8)"/>
-    <setting label="30003" id="g08" type="labelenum" values="{g08}" visible="eq(-9,9)"/>
-    <setting label="30003" id="g09" type="labelenum" values="{g09}" visible="eq(-10,10)"/>
-    <setting label="30003" id="g10" type="labelenum" values="{g10}" visible="eq(-11,11)"/>
-    <setting label="30003" id="g11" type="labelenum" values="{g11}" visible="eq(-12,12)"/>
-    <setting label="30004" id="source"  type="enum" lvalues="30901|30902"/>
-    <setting label="30005" id="keyword" type="text"/>
-    <setting id="query" type="text" label="" visible="False"/>
-    <setting label="30006" type="action" option="close" action="RunPlugin(plugin://$ID/?mode=endEditSmartList)" enable="!eq(-2,)" visible="eq(-1,)"/>
-    <setting label="30007" type="action" option="close" action="RunPlugin(plugin://$ID/?mode=endEditSmartList)" enable="!eq(-3,)" visible="!eq(-2,)"/>
+    <setting label="30001" id="channel" type="select" values="{channel}" default="{c}"/>
+    <setting label="30002" id="g" type="select" values="{g}" default="{d}"/>
+    <setting label="30003" id="g0" type="select" values="{g0}" default="{d}" visible="eq(-1,1)"/>
+    <setting label="30003" id="g1" type="select" values="{g1}" default="{d1}" visible="eq(-2,2)"/>
+    <setting label="30003" id="g2" type="select" values="{g2}" default="{d2}" visible="eq(-3,3)"/>
+    <setting label="30003" id="g3" type="select" values="{g3}" default="{d3}" visible="eq(-4,4)"/>
+    <setting label="30003" id="g4" type="select" values="{g4}" default="{d4}" visible="eq(-5,5)"/>
+    <setting label="30003" id="g5" type="select" values="{g5}" default="{d5}" visible="eq(-6,6)"/>
+    <setting label="30003" id="g6" type="select" values="{g6}" default="{d6}" visible="eq(-7,7)"/>
+    <setting label="30003" id="g7" type="select" values="{g7}" default="{d7}" visible="eq(-8,8)"/>
+    <setting label="30003" id="g8" type="select" values="{g8}" default="{d8}" visible="eq(-9,9)"/>
+    <setting label="30003" id="g9" type="select" values="{g9}" default="{d9}" visible="eq(-10,10)"/>
+    <setting label="30003" id="g10" type="select" values="{g10}" default="{d10}" visible="eq(-11,11)"/>
+    <setting label="30003" id="g11" type="select" values="{g11}" default="{d11}" visible="eq(-12,12)"/>
+    <setting label="30004" id="source" type="select" lvalues="30901|30902" default="0"/>
+    <setting label="30005" id="keyword" type="text" default=""/>
+    <setting id="id" type="text" default="" visible="False"/>
+    <setting label="30006" type="action" option="close" action="RunPlugin(plugin://$ID/?action=editSmartlist&amp;status=done)" enable="!eq(-2,)" visible="eq(-1,)"/>
+    <setting label="30007" type="action" option="close" action="RunPlugin(plugin://$ID/?action=editSmartlist&amp;status=done)" enable="!eq(-3,)" visible="!eq(-2,)"/>
   </category>
 </settings>

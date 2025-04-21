@@ -17,7 +17,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgctxt "#30000"
-msgid "Smartlist Settings"
+msgid "Smartlist"
 msgstr ""
 
 msgctxt "#30001"
@@ -49,7 +49,7 @@ msgid "[COLOR lightgreen]Change Smartlist[/COLOR]"
 msgstr ""
 
 msgctxt "#30100"
-msgid "Garapon TV Settings"
+msgid "Garapon TV"
 msgstr ""
 
 msgctxt "#30101"
@@ -93,7 +93,7 @@ msgid "[COLOR lightgreen]Update Channel List[/COLOR]"
 msgstr ""
 
 msgctxt "#30200"
-msgid "Other Settings"
+msgid "Others"
 msgstr ""
 
 msgctxt "#30201"

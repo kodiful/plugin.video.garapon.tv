@@ -17,7 +17,7 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 msgctxt "#30000"
-msgid "Smartlist Settings"
+msgid "Smartlist"
 msgstr "スマートリスト"
 
 msgctxt "#30001"
@@ -49,8 +49,8 @@ msgid "[COLOR lightgreen]Change Smartlist[/COLOR]"
 msgstr "[COLOR lightgreen]スマートリストを変更[/COLOR]"
 
 msgctxt "#30100"
-msgid "Garapon TV Settings"
-msgstr "ガラポンTV設定"
+msgid "Garapon TV"
+msgstr "ガラポンTV"
 
 msgctxt "#30101"
 msgid "Garapon ID"
@@ -93,8 +93,8 @@ msgid "[COLOR lightgreen]Update Channel List[/COLOR]"
 msgstr "[COLOR lightgreen]チャンネルリストを更新[/COLOR]"
 
 msgctxt "#30200"
-msgid "Other Settings"
-msgstr "その他の設定"
+msgid "Others"
+msgstr "その他"
 
 msgctxt "#30201"
 msgid "[COLOR lightgreen]Clear Thumbnails Cache[/COLOR]"
@@ -130,7 +130,7 @@ msgstr "スマートリストを削除"
 
 msgctxt "#30906"
 msgid "Description"
-msgstr "詳細情報"
+msgstr "番組情報"
 
 msgctxt "#30907"
 msgid "Date"
